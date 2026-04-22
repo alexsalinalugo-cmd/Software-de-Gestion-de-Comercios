@@ -10,6 +10,15 @@ export interface Producto {
   id_ubicacion: number | null;
   id_proveedor: number | null;
   id_categoria: number;
+  categoria_nombre: string;
+  proveedor_cuit: string;
+  proveedor_nombre: string;
+  proveedor_MedioContacto: string;
+  proveedor_NombreContacto: string;
+  proveedor_DiaVisita: string;
+  ubicacion_sector: string;
+  ubicacion_estanteria: string;
+  ubicacion_posicion: string;
 }
 
 export interface CrearProducto {
