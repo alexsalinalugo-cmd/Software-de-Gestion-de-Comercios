@@ -58,7 +58,7 @@ const TablaProductos = ({ datos, onEditar }: TablaProducto) => {
                 </td>
                 <td className="p-3">
                   <span className="bg-gray-700/40 text-gray-200 px-2 py-1 rounded text-xs ">
-                    {producto.nombre_categoria}
+                    {producto.categoria_nombre}
                   </span>
                 </td>
                 <td className="p-3">
@@ -69,7 +69,7 @@ const TablaProductos = ({ datos, onEditar }: TablaProducto) => {
                     {EstadoStock ? "Crítico" : "Normal"}
                   </span>
                 </td>
-                <td className="p-3 ">{producto.nombre_proveedor}</td>
+                <td className="p-3 ">{producto.proveedor_nombre}</td>
                 <td className="p-3 flex flex-col">
                   <button
                     className="bg-blue-500 text-white px-2 py-1 rounded text-xs mb-1"

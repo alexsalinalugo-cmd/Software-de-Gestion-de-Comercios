@@ -1,5 +1,5 @@
 import http, { IncomingMessage, ServerResponse } from "http";
-import { GetProductosController } from "./producto.controllers";
+import { ProductosController } from "./producto.controllers";
 export const productoRoutes = async (
   req: IncomingMessage,
   res: ServerResponse,
@@ -10,10 +10,16 @@ export const productoRoutes = async (
   //req.header.host = http://localhost:3000 xq? xq new URL necesita del host para interactuar
   // total = http://localhost:3000/api/productos/Mostrar
 
-  const ruta = miUrl.pathname; //nos da la ruta limpia  /api/productos/Mostrar
+  const ruta = miUrl.pathname.replace("/api/productos", ""); //nos da la ruta limpia  /api/productos/Mostrar o podemos hacer .replace
   const metodo = req.method;
 
-  if (ruta === "/api/productos/Mostrar" && metodo === "GET") {
-    return await GetProductosController(req, res);
+  if (ruta === "/mostrar" && metodo === "GET") {
+    return await ProductosController.TraerProductosController(req, res);
+  }
+  if (ruta === "/crear" && metodo === "POST") {
+    return await ProductosController.CrearProductosController(req, res);
+  }
+  if (ruta === "/editar" && metodo === "PUT") {
+    return await ProductosController.EditarProductosController(req, res);
   }
 };

@@ -1,7 +1,7 @@
 interface Proveedores {
   id_proveedor: number;
   proveedor_cuit: string;
-  nombre_proveedor: string;
+  proveedor_nombre: string;
   proveedor_MedioContacto: string;
   proveedor_NombreContacto: string;
   proveedor_DiaVisita: string;
@@ -23,7 +23,7 @@ export interface Producto extends Proveedores, Ubicacion {
   stock_minimo: number;
   qr_code: string;
   id_categoria: number;
-  nombre_categoria: string;
+  categoria_nombre: string;
 }
 
 export interface TablaProducto {

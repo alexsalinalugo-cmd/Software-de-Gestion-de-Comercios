@@ -7,4 +7,12 @@ export class ProductoService {
 
     return productos;
   }
+  static async AgregarProductos(Datos: Producto): Promise<Producto> {
+    const res = await ProductoRepository.create(Datos);
+    return res;
+  }
+  static async EditarProductos(Datos: Producto): Promise<Producto> {
+    const res = await ProductoRepository.edit(Datos);
+    return res;
+  }
 }

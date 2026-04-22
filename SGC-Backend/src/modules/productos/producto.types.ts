@@ -9,7 +9,7 @@ export interface Producto {
   qr_code: string | null;
   id_ubicacion: number | null;
   id_proveedor: number | null;
-  id_categoria: number;
+  id_categoria: number | null;
   categoria_nombre: string;
   proveedor_cuit: string;
   proveedor_nombre: string;

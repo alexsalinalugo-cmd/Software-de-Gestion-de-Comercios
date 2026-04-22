@@ -15,7 +15,7 @@ export default function GestionProductos() {
   useEffect(() => {
     const ObtenerPro = async () => {
       try {
-        const res = await fetch("http://localhost:3000/Productos");
+        const res = await fetch("http://localhost:3000/api/productos/mostrar");
         if (res.ok) {
           const data = await res.json();
           setProductos(data);
@@ -32,7 +32,7 @@ export default function GestionProductos() {
 
   const AgregarPro = async (Pro: Producto) => {
     try {
-      const res = await fetch("http://localhost:3000/AgregarPro", {
+      const res = await fetch("http://localhost:3000/api/productos/crear", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export default function GestionProductos() {
   };
   const GuardarCambios = async (ProActualizado: Producto) => {
     try {
-      const res = await fetch("http://localhost:3000/EditarPro", {
+      const res = await fetch("http://localhost:3000/api/productos/editar", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -58,9 +58,12 @@ export default function GestionProductos() {
       });
       if (res.ok) {
         const NuevosProductos = await res.json();
+        setProductos([...Productos, NuevosProductos]);
         //logica
       }
-    } catch {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
