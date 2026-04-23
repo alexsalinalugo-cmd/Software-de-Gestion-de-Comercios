@@ -41,7 +41,8 @@ export default function GestionProductos() {
       });
       if (res.ok) {
         const NuevoProductos = await res.json();
-        setProductos([...Productos, NuevoProductos]);
+        //setProductos([...Productos, NuevoProductos]);
+        setProductos((prev) => [...prev, NuevoProductos]);
       }
     } catch (error) {
       console.log(error);
@@ -59,10 +60,10 @@ export default function GestionProductos() {
       if (res.ok) {
         const ProductoEditado = await res.json();
 
-        // ✅ BIEN: Esto busca el ID y reemplaza solo ese elemento
-        setProductos(
-          Productos.map((p) =>
-            p.id === ProductoEditado.id ? ProductoEditado : p,
+        //prev nos da exactamente lo que hay ahora en el estado (buena practica)
+        setProductos((prev) =>
+          prev.map((p) =>
+            Number(p.id) === Number(ProductoEditado.id) ? ProductoEditado : p,
           ),
         );
 
@@ -72,6 +73,25 @@ export default function GestionProductos() {
       console.log(error);
     }
   };
+  const EliminarPro = async (id: number) => {
+    const Confirmar = window.confirm(
+      //hay una manera de hacerla mas linda con SweetAlert2
+      "¿Seguro que quiere eliminar este producto?",
+    );
+    if (Confirmar) {
+      const res = await fetch(
+        `http://localhost:3000/api/productos/eliminar?id=${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (res.ok) {
+        setProductos((prev) => prev.filter((p) => p.id !== id));
+      }
+    }
+  };
+
   return (
     <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
       <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white flex flex-wrap items-center justify-between gap-4">
@@ -86,7 +106,11 @@ export default function GestionProductos() {
           <p className="text-shadow-red-600">Cargando</p>
         ) : (
           //Parametros que le pasamos a la tabla para mostrar los datos de los productos
-          <TablaPro datos={Productos} onEditar={FuncionEditar} />
+          <TablaPro
+            datos={Productos}
+            onEditar={FuncionEditar}
+            onEliminar={EliminarPro}
+          />
         )}
       </div>
       {ProductoEditar && (

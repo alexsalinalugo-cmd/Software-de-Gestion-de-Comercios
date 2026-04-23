@@ -29,6 +29,7 @@ export interface Producto extends Proveedores, Ubicacion {
 export interface TablaProducto {
   datos: Producto[];
   onEditar: (producto: Producto) => void;
+  onEliminar: (id: number) => void;
 }
 export interface AgregarProducto {
   onAgregar: (producto: Producto) => void;
