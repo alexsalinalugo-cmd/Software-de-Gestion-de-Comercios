@@ -27,7 +27,3 @@ export const server = http.createServer(async (req, res) => {
   res.writeHead(404, { "content-Type": "application/json" });
   res.end(JSON.stringify({ message: "Ruta global no encontrada" }));
 });
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(` Servidor listo en http://localhost:${PORT}`);
-});

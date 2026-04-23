@@ -1,0 +1,29 @@
+# Dependencias (NUNCA subas esto, es muy pesado)
+node_modules/
+jspm_packages/
+
+# Variables de entorno (Seguridad: aquí van tus contraseñas de DB)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Compilación y Build
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Logs de error
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de sistema (Windows/Mac)
+Thumbs.db
+.DS_Store
+
+# IDEs (VS Code, JetBrains)
+.vscode/
+.idea/
