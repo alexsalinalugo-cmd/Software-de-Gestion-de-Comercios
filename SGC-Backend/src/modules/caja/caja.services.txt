@@ -1,0 +1,20 @@
+import { CajaRepository }
+Traemos el repository porque el service lo necesita para hablar con la base de datos.
+
+import { AbrirCaja, Caja }
+Los mismos types de antes para tipar los datos.
+
+static async abrirCaja(datos: AbrirCaja): Promise<Caja>
+Misma firma que en el repository, recibe el monto y devuelve la caja completa.
+
+if (datos.monto_apertura <= 0)
+Acá está la regla del negocio que definimos. Si el monto es cero o negativo, lanzamos un error.
+
+throw new Error(...)
+Lanzamos el error con un mensaje claro. El controller lo va a atrapar y convertir en una respuesta HTTP.
+
+CajaRepository.abrirCaja(datos)
+Si pasó la validación, le pedimos al repository que cree el registro en la base de datos.
+
+return caja
+Devolvemos la caja creada al controller.

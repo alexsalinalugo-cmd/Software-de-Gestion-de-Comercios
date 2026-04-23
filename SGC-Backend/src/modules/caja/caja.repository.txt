@@ -1,0 +1,35 @@
+import { pool } from "../../config/db"
+Traemos la conexión a la base de datos que ya tenías hecha. Sin esto no podemos hablar con MySQL.
+import { AbrirCaja, Caja } from "./caja.types"
+Traemos los tipos que creamos antes. Así TypeScript sabe qué forma tienen los datos.
+
+
+
+export class CajaRepository
+Creamos la clase del repository. La exportamos para que el service la pueda usar.
+
+
+
+static async abrirCaja(datos: AbrirCaja): Promise<Caja>
+
+Función para abrir la caja. Recibe los datos del tipo AbrirCaja — o sea solo el monto_apertura. Devuelve
+ una promesa con la caja completa.
+
+pool.execute(...)
+Ejecuta la query en la base de datos.
+INSERT INTO caja (monto_apertura, fecha_apertura, estado) VALUES (?, NOW(), 'abierta')
+Crea el registro en la tabla caja. NOW() es MySQL generando la fecha actual. 'abierta' lo ponemos nosotros automáticamente, el cajero no lo elige.
+?
+Es un placeholder de seguridad. En vez de poner el valor directo en la query, MySQL lo reemplaza solo. Esto evita ataques de SQL injection.
+(result as any).insertId
+MySQL nos devuelve el id que le asignó al registro que acabamos de crear. Lo guardamos para poder buscarlo.
+
+this.obtenerCajaPorId(id)
+Usamos la segunda función para traer la caja completa recién creada y devolverla.
+
+static async obtenerCajaPorId(id: number): Promise<Caja | null>
+Función para buscar una caja por su id. Devuelve la caja si existe, o null si no existe.
+SELECT * FROM caja WHERE id = ?
+Busca en la tabla caja el registro con ese id.
+cajas[0] || null
+MySQL siempre devuelve un array. Si encontró algo, devolvemos el primer elemento. Si no encontró nada, devolvemos null.

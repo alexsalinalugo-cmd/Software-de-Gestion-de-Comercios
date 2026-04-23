@@ -1,0 +1,22 @@
+import { IncomingMessage, ServerResponse } from "http"
+Importamos los tipos de Node.js nativo. IncomingMessage es el request que llega, ServerResponse es la respuesta que mandamos.
+
+import { CajaService } from "./caja.service"
+Traemos el service porque el controller lo necesita para delegar la lógica.
+
+export class CajaController
+Creamos la clase y la exportamos para que las routes la puedan usar.
+
+static async abrirCaja(req: IncomingMessage, res: ServerResponse): Promise<void>
+La función recibe el request y el response. Devuelve Promise<void>
+ porque no devuelve nada al código, sino que responde al navegador con res.end.
+
+ let datos = ""
+Creamos una variable vacía donde vamos a ir juntando el body que llega.
+
+req.on("data", (chunk) => { datos += chunk.toString() })
+El body no llega de golpe, llega en pedazos llamados chunks. 
+Cada vez que llega un pedazo lo convertimos a texto y lo sumamos a datos.
+
+req.on("end", async () => { ... })
+Cuando terminaron de llegar todos los pedazos, recién ahí ejecutamos todo lo que está adentro.
