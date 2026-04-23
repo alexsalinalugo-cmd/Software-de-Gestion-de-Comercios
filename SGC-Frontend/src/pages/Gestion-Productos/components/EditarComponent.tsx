@@ -21,13 +21,15 @@ const EditarComponent = ({
 
     const productoFinal = {
       ...valores,
+      id: Producto.id,
+
       precio_costo: Number(valores.precio_costo),
       precio_venta: Number(valores.precio_venta),
       stock_total: Number(valores.stock_total),
       stock_minimo: Number(valores.stock_minimo),
       id_categoria: Number(valores.id_categoria),
       id_proveedor: Number(valores.id_proveedor),
-      id_ubicacion: Number(valores.id_ubicacion),
+      id_ubicacion: Producto.id_ubicacion,
     } as Producto;
 
     onActualizar(productoFinal);
@@ -211,7 +213,7 @@ const EditarComponent = ({
                 placeholder="Eje(carpinteria)"
                 name="categoria_nombre"
                 className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.nombre_categoria}
+                defaultValue={Producto.categoria_nombre}
               />
             </div>
 
@@ -224,7 +226,7 @@ const EditarComponent = ({
                 placeholder="Eje(Distribuidora 'Sol')"
                 name="proveedor_nombre"
                 className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.nombre_proveedor}
+                defaultValue={Producto.proveedor_nombre}
               />
             </div>
           </div>

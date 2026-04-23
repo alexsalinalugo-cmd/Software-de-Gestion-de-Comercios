@@ -1,6 +1,6 @@
 import { pool } from "../../config/db";
 import { Producto } from "./producto.types";
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class ProductoRepository {
   static async getAll(): Promise<Producto[]> {
@@ -25,6 +25,7 @@ export class ProductoRepository {
       stock_total,
       stock_minimo,
       qr_code,
+
       id_categoria,
       id_proveedor,
       categoria_nombre,
@@ -117,40 +118,114 @@ export class ProductoRepository {
     );
 
     if (Resultado.affectedRows > 0) {
-      const ProductoNuevo: Producto = {
-        id: Resultado.insertId,
-        nombre: nombre,
-        precio_costo: precio_costo,
-        precio_venta: precio_venta,
-        unidad_medida: unidad_medida,
-        stock_total: stock_total,
-        stock_minimo: stock_minimo,
-        qr_code: Qr_code,
-        id_ubicacion: IdUbicacion,
-        id_proveedor: IdProveedor,
-        id_categoria: IdCategoria,
-        categoria_nombre,
-        proveedor_cuit,
-        proveedor_nombre,
-        proveedor_MedioContacto,
-        proveedor_NombreContacto,
-        proveedor_DiaVisita,
-        ubicacion_sector,
-        ubicacion_estanteria,
-        ubicacion_posicion,
-      };
+      //podemos hacerlo asi o hacer otra consulta buscando x id y devolviendo todo el producto donde coincida con el id
+      const ProductoNuevo = await ProductoRepository.getbyid(
+        Resultado.insertId,
+      );
       return ProductoNuevo;
     }
     throw new Error("No se pudo insertar el producto");
   }
 
   static async edit(Datos: Producto): Promise<Producto> {
-    const id = Datos.id;
-    const [ProductoEditado] = await pool.query<ResultSetHeader>(
-      `SELECT * FROM productos WHERE id = (?)`,
+    const {
+      id,
+      nombre,
+      precio_costo,
+      precio_venta,
+      unidad_medida,
+      stock_total,
+      stock_minimo,
+      qr_code,
+      id_ubicacion,
+      id_categoria,
+      id_proveedor,
+      ubicacion_sector,
+      ubicacion_estanteria,
+      ubicacion_posicion,
+    } = Datos;
+    let idubi = id_ubicacion;
+    // 2. Si el producto tiene una ubicación asignada, la actualizamos
+    if (id_ubicacion) {
+      await pool.query(
+        "UPDATE ubicaciones SET sector = ?, estanteria = ?, posicion = ? WHERE id = ?",
+        [
+          ubicacion_sector || null,
+          ubicacion_estanteria || null,
+          ubicacion_posicion || null,
+          id_ubicacion,
+        ],
+      );
+    } else if (ubicacion_sector) {
+      // Si no tenía ID pero el usuario escribió un sector ahora
+      const [nuevaUbi]: any = await pool.query(
+        "INSERT INTO ubicaciones (sector, estanteria, posicion) VALUES (?, ?, ?)",
+        [
+          ubicacion_sector,
+          ubicacion_estanteria || null,
+          ubicacion_posicion || null,
+        ],
+      );
+      idubi = nuevaUbi.insertId;
+      // Actualizamos la variable para que el siguiente UPDATE la use
+    }
+
+    const [ProEditado] = await pool.query<ResultSetHeader>(
+      `UPDATE productos 
+      SET 
+      nombre=?,
+      precio_costo=?,
+      precio_venta=?,
+      unidad_medida=?,
+      stock_total=?,
+      stock_minimo=?,
+      qr_code=?,
+      id_ubicacion=?,
+      id_proveedor=?,
+      id_categoria=?
+       WHERE id = (?)`,
+      [
+        nombre,
+        precio_costo,
+        precio_venta,
+        unidad_medida,
+        stock_total,
+        stock_minimo,
+        qr_code,
+        idubi,
+        id_proveedor,
+        id_categoria,
+        id, // EL ID VA AL FINAL
+      ],
+    );
+    if (ProEditado.affectedRows === 0) {
+      throw new Error("No se pudo actualizar el producto xq no se encontro");
+    }
+    const RenderActualizado = await ProductoRepository.getbyid(id);
+    if (!RenderActualizado)
+      throw new Error("No se pudo actualizar el producto xq no se encontro");
+    return RenderActualizado;
+  }
+
+  static async getbyid(id: number): Promise<Producto> {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      `
+      SELECT p.*,c.nombre AS categoria_nombre, pr.nombre AS proveedor_nombre, ubi.sector , ubi.estanteria, ubi.posicion
+      FROM productos p 
+      LEFT JOIN categoria c ON p.id_categoria = c.id
+      LEFT JOIN proveedores pr ON p.id_proveedor = pr.id
+      LEFT JOIN ubicaciones ubi ON p.id_ubicacion = ubi.id
+      WHERE p.id=?
+
+      `,
       [id],
     );
-    //logica
-    return;
+
+    if (rows.length > 0) {
+      return rows[0] as Producto;
+    }
+    throw new Error("No se encontro el producto con el id");
   }
 }
+// ResultSetHeader / OkPacket: Se usan para INSERT/UPDATE. Tienen propiedades como affectedRows, pero no son arrays, por eso no tienen .length.
+// RowDataPacket[]: Es el tipo correcto para un SELECT. Indica que recibes una lista de filas, y como es un array, tiene la propiedad .length.

@@ -57,9 +57,16 @@ export default function GestionProductos() {
         body: JSON.stringify(ProActualizado),
       });
       if (res.ok) {
-        const NuevosProductos = await res.json();
-        setProductos([...Productos, NuevosProductos]);
-        //logica
+        const ProductoEditado = await res.json();
+
+        // ✅ BIEN: Esto busca el ID y reemplaza solo ese elemento
+        setProductos(
+          Productos.map((p) =>
+            p.id === ProductoEditado.id ? ProductoEditado : p,
+          ),
+        );
+
+        setProductoEditar(null);
       }
     } catch (error) {
       console.log(error);
