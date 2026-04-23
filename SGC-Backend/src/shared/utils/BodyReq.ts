@@ -8,12 +8,22 @@ export const getBodyData = <T>(req: IncomingMessage): Promise<T> => {
       Cuerpo += chunk.toString();
     });
 
-    req.on("end", async () => {
+    req.on("end", () => {
       try {
-        CuerpoParse = Cuerpo ? JSON.parse(Cuerpo) : {};
+        const data = Cuerpo ? JSON.parse(Cuerpo) : {};
+        CuerpoParse(data as T);
       } catch (error) {
         ErrorParse(new Error("JSON INVALIDO"));
       }
     });
   });
+};
+
+export const QueryParams = (url: URL): number => {
+  let idCapturado = url.searchParams.get("id");
+  if (!idCapturado) {
+    return 0;
+  }
+  const id = parseInt(idCapturado);
+  return id;
 };

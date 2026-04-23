@@ -15,4 +15,8 @@ export class ProductoService {
     const res = await ProductoRepository.edit(Datos);
     return res;
   }
+  static async EliminarProductos(id: number): Promise<boolean> {
+    const res = await ProductoRepository.delete(id);
+    return res;
+  }
 }

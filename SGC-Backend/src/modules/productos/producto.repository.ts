@@ -232,6 +232,19 @@ export class ProductoRepository {
     }
     throw new ManagerErrors("No se encontro el producto con el id", 404);
   }
+
+  static async delete(id: number): Promise<boolean> {
+    const [Delete] = await pool.query<ResultSetHeader>(
+      `
+      DELETE FROM productos WHERE id = ?
+      `,
+      [id],
+    );
+    if (Delete.affectedRows === 0) {
+      throw new ManagerErrors("No se encontro el producto con el id", 404);
+    }
+    return true;
+  }
 }
 // ResultSetHeader / OkPacket: Se usan para INSERT/UPDATE. Tienen propiedades como affectedRows, pero no son arrays, por eso no tienen .length.
 // RowDataPacket[]: Es el tipo correcto para un SELECT. Indica que recibes una lista de filas, y como es un array, tiene la propiedad .length.

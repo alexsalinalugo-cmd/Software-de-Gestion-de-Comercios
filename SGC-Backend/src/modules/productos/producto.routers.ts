@@ -12,6 +12,7 @@ export const productoRoutes = async (
 
   const ruta = miUrl.pathname.replace("/api/productos", ""); //nos da la ruta limpia  /api/productos/Mostrar o podemos hacer .replace
   const metodo = req.method;
+  console.log("DEBUG ROUTER -> Ruta:", ruta, "Metodo:", metodo); // <--- SI ESTO NO IMPRIME, EL PROBLEMA ES APP.TS
 
   if (ruta === "/mostrar" && metodo === "GET") {
     return await ProductosController.TraerProductosController(req, res);
@@ -21,5 +22,12 @@ export const productoRoutes = async (
   }
   if (ruta === "/editar" && metodo === "PUT") {
     return await ProductosController.EditarProductosController(req, res);
+  }
+  if (ruta === "/eliminar" && metodo === "DELETE") {
+    return await ProductosController.EliminarProductosController(
+      req,
+      res,
+      miUrl,
+    );
   }
 };

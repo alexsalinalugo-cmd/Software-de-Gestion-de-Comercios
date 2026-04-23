@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { ProductoService } from "./producto.services";
-import { getBodyData } from "../../shared/utils/BodyReq";
+import { getBodyData, QueryParams } from "../../shared/utils/BodyReq";
 import { ManagerErrors } from "../../shared/errors/AppErrors";
 import { Producto } from "./producto.types";
 
@@ -44,25 +44,44 @@ export class ProductosController {
     req: IncomingMessage,
     res: ServerResponse,
   ): Promise<void> {
-    let Datos = "";
-    req.on("data", (chunk) => {
-      Datos += chunk.toString();
-    });
-    req.on("end", async () => {
-      const DatosParseados = JSON.parse(Datos);
-      try {
-        const ProductoEditado =
-          await ProductoService.EditarProductos(DatosParseados);
+    try {
+      const DatosParseados = await getBodyData<Producto>(req);
+      const ProductoEditado =
+        await ProductoService.EditarProductos(DatosParseados);
+      res.writeHead(200);
+      res.end(JSON.stringify(ProductoEditado));
+    } catch (error: any) {
+      console.error(error);
+      const statuscode =
+        error instanceof ManagerErrors ? error.statuscode : 500; //si es un error/status puesto desde la clase ponemos ese si no 500
+      const mensaje = error.message || "Error interno del servidor";
+      res.statusCode = statuscode;
+      res.end(JSON.stringify({ Mensaje: mensaje }));
+    }
+  }
+  static async EliminarProductosController(
+    req: IncomingMessage,
+    res: ServerResponse,
+    miUrl: URL,
+  ): Promise<void> {
+    try {
+      const id = QueryParams(miUrl);
+      console.log("DEBUG: ID capturado =", id, "Tipo =", typeof id);
+      if (id === 0)
+        throw new ManagerErrors("ID de producto no válido o ausente", 400);
+
+      const ProductoEliminado = await ProductoService.EliminarProductos(id);
+      if (ProductoEliminado) {
         res.writeHead(200);
-        res.end(JSON.stringify(ProductoEditado));
-      } catch (error: any) {
-        console.error(error);
-        const statuscode =
-          error instanceof ManagerErrors ? error.statuscode : 500; //si es un error/status puesto desde la clase ponemos ese si no 500
-        const mensaje = error.message || "Error interno del servidor";
-        res.statusCode = statuscode;
-        res.end(JSON.stringify({ Mensaje: mensaje }));
+        res.end(JSON.stringify({ Mensaje: "Producto eliminado" }));
       }
-    });
+    } catch (error: any) {
+      console.error(error);
+      const statuscode =
+        error instanceof ManagerErrors ? error.statuscode : 500; //si es un error/status puesto desde la clase ponemos ese si no 500
+      const mensaje = error.message || "Error interno del servidor";
+      res.statusCode = statuscode;
+      res.end(JSON.stringify({ Mensaje: mensaje }));
+    }
   }
 }
