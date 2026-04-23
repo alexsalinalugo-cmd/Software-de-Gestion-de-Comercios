@@ -20,3 +20,44 @@ Cada vez que llega un pedazo lo convertimos a texto y lo sumamos a datos.
 
 req.on("end", async () => { ... })
 Cuando terminaron de llegar todos los pedazos, recién ahí ejecutamos todo lo que está adentro.
+
+const datosParseados = JSON.parse(datos)
+datos es un string de texto. Con JSON.parse lo convertimos a un objeto JavaScript que podemos usar.
+ Por ejemplo '{"monto_apertura": 5000}' se convierte en { monto_apertura: 5000 }.
+
+ 
+const caja = await CajaService.abrirCaja(datosParseados)
+Le pasamos los datos al service. El await espera a que termine antes de seguir.
+
+res.writeHead(201)
+Le decimos al navegador que todo salió bien y que se creó algo nuevo. 201 significa "creado exitosamente".
+
+res.end(JSON.stringify(caja))
+Convertimos la caja a texto JSON y la mandamos como respuesta. res.end cierra la respuesta.
+
+catch (error: any)
+Si algo falló en el try, caemos acá.
+if (error.message === "El monto de apertura debe ser mayor a cero")
+Preguntamos si el error es el que nosotros lanzamos en el service. Si es así, es un error del usuario, no del servidor
+
+res.writeHead(400)
+400 significa "pedido incorrecto". El usuario mandó datos que no son válidos.
+
+
+res.end(JSON.stringify({ mensaje: error.message }))
+Le devolvemos el mensaje de error para que sepa qué hizo mal.
+
+res.writeHead(500)
+Si el error no es el nuestro, es un error del servidor. 500 significa "algo explotó adentro".
+
+
+
+
+
+
+cerrarCaja — Igual que abrir, usa parsearBody para obtener el body y llama al service.
+res.writeHead(200) — 200 significa "todo salió bien". No es 201 porque no estamos creando algo nuevo, estamos actualizando.
+new URL(req.url!, "http://localhost") — Para el GET necesitamos leer el id de la URL. Por ejemplo /api/caja/estado/1.
+url.pathname.split("/").pop() — Dividimos la URL por / y tomamos el último pedazo que es el id.
+parseInt(...) — Convertimos ese id de string a número.
+res.writeHead(404) — Si la caja no existe devolvemos 404 que significa "no encontrado".

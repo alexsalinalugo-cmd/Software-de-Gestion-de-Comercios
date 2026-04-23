@@ -1,5 +1,5 @@
 import { pool } from "../../config/db";
-import { AbrirCaja, Caja } from "./caja.types";
+import { AbrirCaja, CerrarCaja, Caja } from "./caja.types";
 
 export class CajaRepository {
   static async abrirCaja(datos: AbrirCaja): Promise<Caja> {
@@ -14,6 +14,21 @@ export class CajaRepository {
   }
 
   static async obtenerCajaPorId(id: number): Promise<Caja | null> {
+    const [rows] = await pool.execute(`SELECT * FROM caja WHERE id = ?`, [id]);
+    const cajas = rows as Caja[];
+    return cajas[0] || null;
+  }
+
+  static async cerrarCaja(datos: CerrarCaja): Promise<Caja | null> {
+    await pool.execute(
+      `UPDATE caja SET monto_cierre = ?, fecha_cierre = NOW(), estado = 'cerrada' 
+       WHERE id = ?`,
+      [datos.monto_cierre, datos.id_caja],
+    );
+    return this.obtenerCajaPorId(datos.id_caja);
+  }
+
+  static async obtenerEstadoCaja(id: number): Promise<Caja | null> {
     const [rows] = await pool.execute(`SELECT * FROM caja WHERE id = ?`, [id]);
     const cajas = rows as Caja[];
     return cajas[0] || null;

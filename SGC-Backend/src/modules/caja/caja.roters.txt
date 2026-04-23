@@ -1,0 +1,13 @@
+import { CajaController } — Traemos el controller porque la route lo necesita para redirigir
+
+export function cajaRoutes(...): boolean — La función devuelve un booleano. true si encontró la ruta, false si no era una ruta de caja.
+
+req.method === "POST" — Verificamos que sea un POST.
+
+req.url === "/caja/abrir" — Verificamos que sea exactamente esa URL.
+
+CajaController.abrirCaja(req, res) — Si coincide, llamamos al controller.
+
+return true — Le avisamos al servidor que esta ruta fue manejada.
+
+return false — Si no coincidió ninguna ruta, le avisamos que siga buscando en otros módulos.

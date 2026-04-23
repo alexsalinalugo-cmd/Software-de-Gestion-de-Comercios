@@ -2,6 +2,7 @@ import http from "http";
 // src/app.ts
 import { productoRoutes } from "./modules/productos/producto.routers";
 // Importamos el ruteador de ventas
+import { cajaRoutes } from "./modules/caja/caja.routers";
 
 export const server = http.createServer(async (req, res) => {
   const { url } = req;
@@ -21,6 +22,11 @@ export const server = http.createServer(async (req, res) => {
   // 1. Rutas de Productos
   if (url?.startsWith("/api/productos")) {
     return await productoRoutes(req, res);
+  }
+
+  // 2. Rutas de Caja
+  if (url?.startsWith("/api/caja")) {
+    return await cajaRoutes(req, res);
   }
 
   // Manejo de errores 404 global

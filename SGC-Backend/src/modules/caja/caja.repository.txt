@@ -33,3 +33,17 @@ SELECT * FROM caja WHERE id = ?
 Busca en la tabla caja el registro con ese id.
 cajas[0] || null
 MySQL siempre devuelve un array. Si encontró algo, devolvemos el primer elemento. Si no encontró nada, devolvemos null.
+
+
+
+
+
+
+
+
+UPDATE caja SET — Actualiza el registro existente en vez de crear uno nuevo.
+monto_cierre = ? — Guarda el monto que contó el cajero.
+fecha_cierre = NOW() — MySQL genera la fecha de cierre automáticamente.
+estado = 'cerrada' — Cambia el estado para que no se puedan hacer más ventas.
+WHERE id = ? — Solo actualiza la caja con ese id, no todas.
+return this.obtenerCajaPorId — Después del UPDATE traemos la caja actualizada para devolverla.
