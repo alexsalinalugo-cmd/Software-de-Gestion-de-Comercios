@@ -1,7 +1,7 @@
 import { pool } from "../../config/db";
 import { Producto } from "./producto.types";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-
+import { ManagerErrors } from "../../shared/errors/AppErrors";
 export class ProductoRepository {
   static async getAll(): Promise<Producto[]> {
     const [rows] = await pool.query(`
@@ -124,7 +124,7 @@ export class ProductoRepository {
       );
       return ProductoNuevo;
     }
-    throw new Error("No se pudo insertar el producto");
+    throw new ManagerErrors("No se pudo insertar el producto", 400);
   }
 
   static async edit(Datos: Producto): Promise<Producto> {
@@ -199,11 +199,17 @@ export class ProductoRepository {
       ],
     );
     if (ProEditado.affectedRows === 0) {
-      throw new Error("No se pudo actualizar el producto xq no se encontro");
+      throw new ManagerErrors(
+        "No se pudo actualizar el productos xq no se encontro",
+        404,
+      );
     }
     const RenderActualizado = await ProductoRepository.getbyid(id);
     if (!RenderActualizado)
-      throw new Error("No se pudo actualizar el producto xq no se encontro");
+      throw new ManagerErrors(
+        "No se pudo actualizar el productos xq no se encontro",
+        404,
+      );
     return RenderActualizado;
   }
 
@@ -224,7 +230,7 @@ export class ProductoRepository {
     if (rows.length > 0) {
       return rows[0] as Producto;
     }
-    throw new Error("No se encontro el producto con el id");
+    throw new ManagerErrors("No se encontro el producto con el id", 404);
   }
 }
 // ResultSetHeader / OkPacket: Se usan para INSERT/UPDATE. Tienen propiedades como affectedRows, pero no son arrays, por eso no tienen .length.

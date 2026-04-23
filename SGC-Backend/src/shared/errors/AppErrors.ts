@@ -1,0 +1,14 @@
+export class ManagerErrors extends Error {
+  public readonly statuscode: number;
+  constructor(message: string, statuscode: number) {
+    super(message);
+    this.statuscode = statuscode;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+//usamos extends asi heredamos las funciones del objeto error nativo de js asi nuestra clase se comporta como un error
+//readonly lo usamos para que una vez declarada el status sea inmutable
+//super decimos que el mensaje ejecuta la logica interna de la clase nativa error
+// captureStackTrace error incluye en su "stack trace" todas las funciones por las que pasó, incluyendo el propio constructor del error.
+//lo que hace esta porcion de codigo es crear la propieda .stack en el this his.constructor
+// como segundo argumento, le estás diciendo: "Generá el rastro de la pila, pero ocultá la llamada a AppError en el informe".
