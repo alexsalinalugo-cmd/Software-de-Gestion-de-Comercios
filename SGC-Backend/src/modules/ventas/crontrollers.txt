@@ -1,0 +1,8 @@
+Línea por línea:
+parsearBody — Igual que en caja, usamos la función de shared/utils para no repetir código.
+VentasService.crearVenta — Le pasamos los datos al service y esperamos la venta creada.
+res.writeHead(201) — 201 porque estamos creando algo nuevo.
+error.message === — Capturamos los errores del negocio que lanzó el service y los convertimos en 400.
+res.writeHead(500) — Cualquier otro error inesperado es 500.
+
+Fijate que el controller es muy corto y simple. ¿Por qué creés que es así?Sonnet 4.6Adaptativo

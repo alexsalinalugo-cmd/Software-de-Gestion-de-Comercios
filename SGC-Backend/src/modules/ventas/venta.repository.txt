@@ -1,0 +1,9 @@
+Línea por línea:
+crearVenta(datos, total) — Recibe los datos de la venta y el total ya calculado. El total lo va a calcular el service antes de llamar acá.
+INSERT INTO ventas — Crea el registro principal de la venta con todos sus datos.
+crearDetalleVenta — Recorre cada producto del array y hace un INSERT por cada uno.
+for (const producto of datos.productos) — Iteramos sobre cada producto que compró el cliente.
+descontarStock — Por cada producto vendido, reduce la cantidad en stock_lotes.
+cantidad_actual = cantidad_actual - ? — Resta la cantidad vendida al stock actual.
+AND cantidad_actual >= ? — Solo descuenta si hay suficiente stock. Si no hay, no hace nada.
+LIMIT 1 — Descuenta de un solo lote a la vez, el primero que encuentre.

@@ -1,0 +1,11 @@
+DetalleVentaInput — Representa un producto dentro de la venta. El cajero manda el id del producto, cuántos lleva y a qué precio.
+
+CrearVenta — Todo lo que manda el frontend para registrar una venta. Fijate que tiene un array productos que puede tener muchos DetalleVentaInput.
+
+id_cliente: number | null — Acordate, puede ser consumidor final entonces es nullable.
+
+metodo_pago: "efectivo" | "tarjeta" | "transferencia" — Solo esos tres valores son válidos, TypeScript no te deja poner otra cosa.
+
+DetalleVenta — El detalle tal como existe en la base de datos, con su propio id y el id_venta que lo vincula.
+
+Venta — La venta completa de la base de datos. Fijate que no tiene productos porque eso vive en detalle_venta.
