@@ -11,11 +11,7 @@ export interface Producto {
   id_proveedor: number | null;
   id_categoria: number | null;
   categoria_nombre: string;
-  proveedor_cuit: string;
   proveedor_nombre: string;
-  proveedor_MedioContacto: string;
-  proveedor_NombreContacto: string;
-  proveedor_DiaVisita: string;
   ubicacion_sector: string;
   ubicacion_estanteria: string;
   ubicacion_posicion: string;
@@ -27,10 +23,15 @@ export interface CrearProducto {
   precio_venta: number;
   unidad_medida: string;
   stock_minimo: number;
+  stock_total: number;
   qr_code?: string | null;
-  id_ubicacion?: number | null;
   id_proveedor?: number | null;
   id_categoria: number;
+  categoria_nombre: string;
+  proveedor_nombre: string;
+  ubicacion_sector: string;
+  ubicacion_estanteria: string;
+  ubicacion_posicion: string;
 }
 
 /* 

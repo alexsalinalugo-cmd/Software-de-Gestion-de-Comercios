@@ -66,7 +66,7 @@ export class ProductosController {
   ): Promise<void> {
     try {
       const id = QueryParams(miUrl);
-      console.log("DEBUG: ID capturado =", id, "Tipo =", typeof id);
+
       if (id === 0)
         throw new ManagerErrors("ID de producto no válido o ausente", 400);
 

@@ -16,7 +16,7 @@ export class ProductoService {
     return res;
   }
   static async EliminarProductos(id: number): Promise<boolean> {
-    const res = await ProductoRepository.delete(id);
+    const res = await ProductoRepository.Desactivar(id);
     return res;
   }
 }

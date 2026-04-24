@@ -1,22 +1,25 @@
 import { pool } from "../../config/db";
-import { Producto } from "./producto.types";
+import { CrearProducto, Producto } from "./producto.types";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { ManagerErrors } from "../../shared/errors/AppErrors";
 export class ProductoRepository {
   static async getAll(): Promise<Producto[]> {
     const [rows] = await pool.query(`
-      SELECT p.*,c.nombre AS categoria_nombre, pr.nombre AS proveedor_nombre, ubi.sector , ubi.estanteria, ubi.posicion
+      SELECT p.*,
+      c.id AS id_categoria,c.nombre AS categoria_nombre,
+      pr.id AS id_proveedor,pr.nombre AS proveedor_nombre,
+      ubi.sector , ubi.estanteria, ubi.posicion
       FROM productos p 
       LEFT JOIN categoria c ON p.id_categoria = c.id
       LEFT JOIN proveedores pr ON p.id_proveedor = pr.id
       LEFT JOIN ubicaciones ubi ON p.id_ubicacion = ubi.id
-
-
+      WHERE p.activo = 1
+      
       `);
 
     return rows as Producto[];
   }
-  static async create(datos: Producto): Promise<Producto> {
+  static async create(datos: CrearProducto): Promise<Producto> {
     const {
       nombre,
       precio_costo,
@@ -25,15 +28,10 @@ export class ProductoRepository {
       stock_total,
       stock_minimo,
       qr_code,
-
       id_categoria,
       id_proveedor,
       categoria_nombre,
-      proveedor_cuit,
       proveedor_nombre,
-      proveedor_MedioContacto,
-      proveedor_NombreContacto,
-      proveedor_DiaVisita,
       ubicacion_sector,
       ubicacion_estanteria,
       ubicacion_posicion,
@@ -77,13 +75,7 @@ export class ProductoRepository {
       const [Proveedor_insert] = await pool.query<ResultSetHeader>(
         "INSERT INTO proveedores (cuit,nombre, medio_contacto, nombre_contacto, dia_visita) VALUES(?,?,?,?,?)",
 
-        [
-          proveedor_cuit || null,
-          proveedor_nombre,
-          proveedor_MedioContacto || null,
-          proveedor_NombreContacto || null,
-          proveedor_DiaVisita || null,
-        ],
+        [proveedor_nombre],
       );
       IdProveedor = Proveedor_insert.insertId; // extraemos el id que se genero y se la damos ala variable para luego poder hacer el insert completo
     } else if (
@@ -118,6 +110,13 @@ export class ProductoRepository {
     );
 
     if (Resultado.affectedRows > 0) {
+      const [StockActualizo] = await pool.query(
+        `
+          INSERT INTO stock_lotes (id_producto,cantidad_inicial,cantidad_actual) VALUES (?,?,?) 
+          `,
+        [Resultado.insertId, stock_total, stock_total],
+      );
+
       //podemos hacerlo asi o hacer otra consulta buscando x id y devolviendo todo el producto donde coincida con el id
       const ProductoNuevo = await ProductoRepository.getbyid(
         Resultado.insertId,
@@ -204,6 +203,14 @@ export class ProductoRepository {
         404,
       );
     }
+
+    const [StockActualizo] = await pool.query(
+      `
+          INSERT INTO stock_lotes (id_producto,cantidad_inicial,cantidad_actual) VALUES (?,?,?) 
+          `,
+      [id, stock_total, stock_total],
+    );
+
     const RenderActualizado = await ProductoRepository.getbyid(id);
     if (!RenderActualizado)
       throw new ManagerErrors(
@@ -233,14 +240,14 @@ export class ProductoRepository {
     throw new ManagerErrors("No se encontro el producto con el id", 404);
   }
 
-  static async delete(id: number): Promise<boolean> {
-    const [Delete] = await pool.query<ResultSetHeader>(
+  static async Desactivar(id: number): Promise<boolean> {
+    const [DesactivarQuery] = await pool.query<ResultSetHeader>(
       `
-      DELETE FROM productos WHERE id = ?
+     UPDATE productos SET activo = 0 WHERE id = ?
       `,
       [id],
     );
-    if (Delete.affectedRows === 0) {
+    if (DesactivarQuery.affectedRows === 0) {
       throw new ManagerErrors("No se encontro el producto con el id", 404);
     }
     return true;
