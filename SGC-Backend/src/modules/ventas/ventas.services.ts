@@ -1,6 +1,6 @@
 import { CajaRepository } from "../caja/caja.repository";
 import { VentasRepository } from "./ventas.repository";
-import { CrearVenta, Venta } from "./ventas.types";
+import { CrearVenta, DetalleVenta, Venta } from "./ventas.types";
 import { pool } from "../../config/db";
 
 export class VentasService {
@@ -41,5 +41,28 @@ export class VentasService {
     } finally {
       conexion.release();
     }
+  }
+
+  static async obtenerVentasPorCaja(id_caja: number): Promise<Venta[]> {
+    const caja = await CajaRepository.obtenerCajaPorId(id_caja);
+
+    if (!caja) {
+      throw new Error("La caja no existe");
+    }
+
+    return await VentasRepository.obtenerVentasPorCaja(id_caja);
+  }
+
+  static async obtenerDetalleVenta(id_venta: number): Promise<DetalleVenta[]> {
+    const [rows] = await pool.execute(`SELECT * FROM ventas WHERE id = ?`, [
+      id_venta,
+    ]);
+    const venta = (rows as Venta[])[0];
+
+    if (!venta) {
+      throw new Error("La venta no existe");
+    }
+
+    return await VentasRepository.obtenerDetalleVenta(id_venta);
   }
 }

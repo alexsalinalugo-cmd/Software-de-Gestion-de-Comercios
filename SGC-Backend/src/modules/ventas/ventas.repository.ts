@@ -43,4 +43,20 @@ export class VentasRepository {
       );
     }
   }
+
+  static async obtenerVentasPorCaja(id_caja: number): Promise<Venta[]> {
+    const [rows] = await pool.execute(
+      `SELECT * FROM ventas WHERE id_caja = ?`,
+      [id_caja],
+    );
+    return rows as Venta[];
+  }
+
+  static async obtenerDetalleVenta(id_venta: number): Promise<DetalleVenta[]> {
+    const [rows] = await pool.execute(
+      `SELECT * FROM detalle_venta WHERE id_venta = ?`,
+      [id_venta],
+    );
+    return rows as DetalleVenta[];
+  }
 }

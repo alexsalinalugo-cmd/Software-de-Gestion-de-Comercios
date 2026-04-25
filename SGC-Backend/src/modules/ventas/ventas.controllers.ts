@@ -27,4 +27,49 @@ export class VentasController {
       }
     }
   }
+
+  static async obtenerVentasPorCaja(
+    req: IncomingMessage,
+    res: ServerResponse,
+  ): Promise<void> {
+    try {
+      const url = new URL(req.url!, `http://localhost`);
+      const id_caja = parseInt(url.pathname.split("/").pop()!);
+
+      const ventas = await VentasService.obtenerVentasPorCaja(id_caja);
+      res.writeHead(200);
+      res.end(JSON.stringify(ventas));
+    } catch (error: any) {
+      if (error.message === "La caja no existe") {
+        res.writeHead(404);
+        res.end(JSON.stringify({ mensaje: error.message }));
+      } else {
+        res.writeHead(500);
+        res.end(JSON.stringify({ mensaje: "Error interno del servidor" }));
+      }
+    }
+  }
+
+  static async obtenerDetalleVenta(
+    req: IncomingMessage,
+    res: ServerResponse,
+  ): Promise<void> {
+    try {
+      const url = new URL(req.url!, `http://localhost`);
+      const partes = url.pathname.split("/");
+      const id_venta = parseInt(partes[3]);
+
+      const detalle = await VentasService.obtenerDetalleVenta(id_venta);
+      res.writeHead(200);
+      res.end(JSON.stringify(detalle));
+    } catch (error: any) {
+      if (error.message === "La venta no existe") {
+        res.writeHead(404);
+        res.end(JSON.stringify({ mensaje: error.message }));
+      } else {
+        res.writeHead(500);
+        res.end(JSON.stringify({ mensaje: "Error interno del servidor" }));
+      }
+    }
+  }
 }

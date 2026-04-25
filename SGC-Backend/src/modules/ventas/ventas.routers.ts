@@ -9,6 +9,14 @@ export function ventasRoutes(
     VentasController.crearVenta(req, res);
     return true;
   }
+  if (req.method === "GET" && req.url?.startsWith("/api/ventas/caja/")) {
+    VentasController.obtenerVentasPorCaja(req, res);
+    return true;
+  }
 
+  if (req.method === "GET" && req.url?.match(/^\/api\/ventas\/\d+\/detalle$/)) {
+    VentasController.obtenerDetalleVenta(req, res);
+    return true;
+  }
   return false;
 }

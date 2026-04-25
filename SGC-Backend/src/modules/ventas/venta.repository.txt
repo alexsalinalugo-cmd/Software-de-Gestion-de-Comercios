@@ -7,3 +7,25 @@ descontarStock — Por cada producto vendido, reduce la cantidad en stock_lotes.
 cantidad_actual = cantidad_actual - ? — Resta la cantidad vendida al stock actual.
 AND cantidad_actual >= ? — Solo descuenta si hay suficiente stock. Si no hay, no hace nada.
 LIMIT 1 — Descuenta de un solo lote a la vez, el primero que encuentre.
+
+
+
+DetalleVentaInput — Representa un producto dentro de la venta. El cajero manda el id del producto, cuántos lleva y a qué precio.
+
+CrearVenta — Todo lo que manda el frontend para registrar una venta. Fijate que tiene un array productos que puede tener muchos DetalleVentaInput.
+
+id_cliente: number | null — Acordate, puede ser consumidor final entonces es nullable.
+
+metodo_pago: "efectivo" | "tarjeta" | "transferencia" — Solo esos tres valores son válidos, TypeScript no te deja poner otra cosa.
+
+DetalleVenta — El detalle tal como existe en la base de datos, con su propio id y el id_venta que lo vincula.
+
+Venta — La venta completa de la base de datos. Fijate que no tiene productos porque eso vive en detalle_venta.
+
+
+id_caja: number — Recibe el id de la caja que queremos consultar.
+Promise<Venta[]> — Devuelve un array de ventas, pueden ser muchas.
+SELECT * FROM ventas WHERE id_caja = ? — Trae todas las ventas de esa caja.
+return rows as Venta[] — Devuelve el array completo.
+
+

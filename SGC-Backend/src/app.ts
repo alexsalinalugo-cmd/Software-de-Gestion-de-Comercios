@@ -1,7 +1,5 @@
 import http from "http";
-// src/app.ts
 import { productoRoutes } from "./modules/productos/producto.routers";
-// Importamos el ruteador de ventas
 import { cajaRoutes } from "./modules/caja/caja.routers";
 import { ventasRoutes } from "./modules/ventas/ventas.routers";
 

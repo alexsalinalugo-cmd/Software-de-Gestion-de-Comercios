@@ -16,7 +16,7 @@ export default function Silebar() {
           </div>
 
           <div>
-            <Link to="/GesionVentas">Ventas</Link>
+            <Link to="/GestionVentas">Ventas</Link>
           </div>
           <div>
             <Link to="/Categorias">Categorias</Link>

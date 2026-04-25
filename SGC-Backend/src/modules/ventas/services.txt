@@ -8,4 +8,6 @@ commit() — Todo salió bien, confirmamos los cambios en la base de datos.
 rollback() — Algo falló, revertimos todo como si nada hubiera pasado.
 finally { conexion.release() } — Siempre liberamos la conexión, haya salido bien o mal.
 
-¿Alguna duda antes del controller?
+CajaRepository.obtenerCajaPorId — Verificamos que la caja existe antes de buscar sus ventas.
+if (!caja) — Si no existe lanzamos error.
+VentasRepository.obtenerVentasPorCaja — Si existe traemos todas sus ventas.
