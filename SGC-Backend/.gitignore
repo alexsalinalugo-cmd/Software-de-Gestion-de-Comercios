@@ -5,8 +5,3 @@ node_modules/
 .env
 .env.local
 .env.*.local
-
-# Ignorar carpetas de compilación
-dist/
-build/
-out/
