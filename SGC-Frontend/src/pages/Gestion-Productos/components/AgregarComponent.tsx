@@ -227,7 +227,7 @@ export default function AgregarComponent({ onAgregar }: AgregarProducto) {
               <input
                 type="text"
                 placeholder="Qr............"
-                name="qr_code"
+                name="codigo_barra"
                 className="p-2 bg-gray-800/30 rounded"
                 value={QrResultado}
                 onChange={(e) => setQrResultado(e.target.value)}

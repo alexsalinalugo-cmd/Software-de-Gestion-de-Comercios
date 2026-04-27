@@ -6,7 +6,7 @@ export interface Producto {
   unidad_medida: string;
   stock_total: number;
   stock_minimo: number;
-  qr_code: string | null;
+  codigo_barra: string | null;
   id_ubicacion: number | null;
   id_proveedor: number | null;
   id_categoria: number | null;
@@ -24,9 +24,10 @@ export interface CrearProducto {
   unidad_medida: string;
   stock_minimo: number;
   stock_total: number;
-  qr_code?: string | null;
+  codigo_barra?: string | null;
+  id_ubicacion: number | null;
   id_proveedor?: number | null;
-  id_categoria: number;
+  id_categoria?: number;
   categoria_nombre: string;
   proveedor_nombre: string;
   ubicacion_sector: string;

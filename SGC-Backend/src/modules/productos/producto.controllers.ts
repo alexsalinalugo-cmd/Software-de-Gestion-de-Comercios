@@ -2,7 +2,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { ProductoService } from "./producto.services";
 import { getBodyData, QueryParams } from "../../shared/utils/BodyReq";
 import { ManagerErrors } from "../../shared/errors/AppErrors";
-import { Producto } from "./producto.types";
+import { CrearProducto, Producto } from "./producto.types";
 
 export class ProductosController {
   static async TraerProductosController(
@@ -25,7 +25,7 @@ export class ProductosController {
     res: ServerResponse,
   ): Promise<void> {
     try {
-      const DatosParseados = await getBodyData<Producto>(req);
+      const DatosParseados = await getBodyData<CrearProducto>(req);
       const ProductoAgregado =
         await ProductoService.AgregarProductos(DatosParseados);
       res.writeHead(201);
@@ -59,7 +59,7 @@ export class ProductosController {
       res.end(JSON.stringify({ Mensaje: mensaje }));
     }
   }
-  static async EliminarProductosController(
+  static async DesactivarProductosController(
     req: IncomingMessage,
     res: ServerResponse,
     miUrl: URL,
@@ -70,8 +70,8 @@ export class ProductosController {
       if (id === 0)
         throw new ManagerErrors("ID de producto no válido o ausente", 400);
 
-      const ProductoEliminado = await ProductoService.EliminarProductos(id);
-      if (ProductoEliminado) {
+      const ProductoDesactivado = await ProductoService.DesactivarProductos(id);
+      if (ProductoDesactivado) {
         res.writeHead(200);
         res.end(JSON.stringify({ Mensaje: "Producto eliminado" }));
       }

@@ -21,7 +21,7 @@ export interface Producto extends Proveedores, Ubicacion {
   unidad_medida: string;
   stock_total: number;
   stock_minimo: number;
-  qr_code: string;
+  codigo_barra: string;
   id_categoria: number;
   categoria_nombre: string;
 }
@@ -37,5 +37,9 @@ export interface AgregarProducto {
 export interface EditarProducto {
   Producto: Producto;
   onActualizar: (producto: Producto) => void;
+  onClose: () => void;
+}
+export interface Detalles {
+  producto: Producto;
   onClose: () => void;
 }

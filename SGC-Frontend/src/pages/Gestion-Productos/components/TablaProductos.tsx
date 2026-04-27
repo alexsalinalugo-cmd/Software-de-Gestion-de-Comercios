@@ -1,6 +1,10 @@
-import type { TablaProducto } from "../../interfaces/Producto";
+import type { TablaProducto, Producto } from "../../interfaces/Producto";
+import Detalles from "./DetallesComponent";
+import { useState } from "react";
 
 const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
+  const [ProductoSeleccionado, setProductoSeleccionado] =
+    useState<Producto | null>(null);
   return (
     <div className="ml-50 p-5  overflow-x-auto ">
       {" "}
@@ -78,7 +82,10 @@ const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
                     >
                       Editar
                     </button>
-                    <button className="bg-yellow-300/20 text-yellow-300 px-2 py-1 rounded text-xs">
+                    <button
+                      className="bg-yellow-300/20 text-yellow-300 px-2 py-1 rounded text-xs"
+                      onClick={() => setProductoSeleccionado(producto)}
+                    >
                       + Detalles
                     </button>
                   </div>
@@ -105,6 +112,12 @@ const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
           })}
         </tbody>
       </table>
+      {ProductoSeleccionado && (
+        <Detalles
+          producto={ProductoSeleccionado}
+          onClose={() => setProductoSeleccionado(null)}
+        />
+      )}
     </div>
   );
 };

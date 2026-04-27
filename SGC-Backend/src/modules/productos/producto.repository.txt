@@ -1,0 +1,2 @@
+// ResultSetHeader / OkPacket: Se usan para INSERT/UPDATE. Tienen propiedades como affectedRows, pero no son arrays, por eso no tienen .length.
+// RowDataPacket[]: Es el tipo correcto para un SELECT. Indica que recibes una lista de filas, y como es un array, tiene la propiedad .length.

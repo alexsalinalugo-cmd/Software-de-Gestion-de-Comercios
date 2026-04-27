@@ -22,8 +22,8 @@ export const productoRoutes = async (
   if (ruta === "/editar" && metodo === "PUT") {
     return await ProductosController.EditarProductosController(req, res);
   }
-  if (ruta === "/eliminar" && metodo === "PUT") {
-    return await ProductosController.EliminarProductosController(
+  if (ruta === "/desactivar" && metodo === "PUT") {
+    return await ProductosController.DesactivarProductosController(
       req,
       res,
       miUrl,

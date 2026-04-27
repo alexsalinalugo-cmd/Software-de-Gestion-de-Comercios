@@ -1,0 +1,22 @@
+1. Transacciones (El "Todo o Nada")
+Es un bloque de operaciones que MySQL trata como una sola unidad. Si una falla, fallan todas.
+beginTransaction(): Abrís un "borrador". Todo lo que hacés (INSERT, UPDATE) queda en pausa y nadie más lo ve todavía.
+commit(): El botón de "Guardar cambios". Recién acá los datos se graban de verdad en la base de datos.
+rollback(): El botón de "Pánico". Si algo salió mal en el try, esto borra el borrador y deja la base de datos como si nunca hubieras intentado hacer nada. Evita que queden "datos huérfanos" (ej: un producto creado pero sin su stock).
+2. Gestión de Conexiones (PoolConnection)
+pool.getConnection(): En lugar de usar el pool global que abre y cierra conexiones solo, acá "secuestrás" una conexión específica para vos. Es necesario para que la transacción funcione, porque el commit y el rollback deben ocurrir en la misma conexión donde hiciste los cambios.
+conexion.release(): Vital. Como pediste una conexión prestada, tenés que devolverla al pool. Si no lo hacés, tu servidor se queda sin conexiones disponibles y se "congela".
+3. Métodos Atómicos (Responsabilidad Única)
+Es la idea de que cada función en el Repository haga una sola cosa de forma perfecta.
+En lugar de tener una función gigante que cree ubicación, proveedor y producto, hacés funciones chiquitas: CrearUbicacion(), insertarStock(), etc.
+Ventaja: Podés reutilizar CrearUbicacion en cualquier otra parte del proyecto sin copiar código.
+4. Arquitectura de Capas (Service vs Repository)
+Separamos el "Cerebro" de las "Manos":
+Repository (Las manos): Solo sabe ejecutar SQL. No sabe si hay una transacción o si el precio es válido. Recibe datos y los guarda.
+Service (El cerebro): Es el que sabe las reglas del negocio. Él decide que antes de crear un producto hay que crear la ubicación, él maneja el try/catch, la transacción y los errores.
+5. Seguridad y Performance (.execute())
+Cambiamos .query() por .execute().
+MySQL "pre-prepara" la consulta, lo que la hace un poquito más rápida y, sobre todo, mucho más segura contra ataques de Inyección SQL, porque desinfecta los parámetros antes de usarlos.
+6. Lógica de Stock por Lotes
+Aprendiste que el Stock Total (en la tabla productos) es para ver rápido, pero el Stock Lote (en stock_lotes) es para saber cuándo entró cada cosa.
+Usamos ORDER BY id ASC LIMIT 1 en los updates de stock para asegurarnos de que, si hay varios lotes, siempre corrijamos el primero y no dupliquemos stock por error.

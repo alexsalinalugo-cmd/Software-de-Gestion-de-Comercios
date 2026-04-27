@@ -8,7 +8,7 @@ const EditarComponent = ({
   onClose,
 }: EditarProducto) => {
   const [Escaner, setEscaner] = useState<boolean>(false);
-  const [QrResultado, setQrResultado] = useState(Producto.qr_code || "");
+  const [QrResultado, setQrResultado] = useState(Producto.codigo_barra || "");
 
   const ManejarEdicion = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //Evita que el navegador recargue la página al hacer clic en el botón de enviar (submit) que es algo que hacen los submit".
@@ -243,7 +243,7 @@ const EditarComponent = ({
             <input
               type="text"
               placeholder="Qr............"
-              name="qr_code"
+              name="codigo_barra"
               className="p-2 bg-gray-800/30 rounded text-white"
               value={QrResultado}
               onChange={(e) => setQrResultado(e.target.value)}

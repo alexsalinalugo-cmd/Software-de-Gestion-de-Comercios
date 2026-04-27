@@ -80,9 +80,9 @@ export default function GestionProductos() {
     );
     if (Confirmar) {
       const res = await fetch(
-        `http://localhost:3000/api/productos/eliminar?id=${id}`,
+        `http://localhost:3000/api/productos/desactivar?id=${id}`,
         {
-          method: "DELETE",
+          method: "PUT",
         },
       );
 
