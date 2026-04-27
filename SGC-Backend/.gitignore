@@ -1,0 +1,12 @@
+# Ignorar dependencias
+node_modules/
+
+# Ignorar variables de entorno (LO MÁS IMPORTANTE)
+.env
+.env.local
+.env.*.local
+
+# Ignorar carpetas de compilación
+dist/
+build/
+out/

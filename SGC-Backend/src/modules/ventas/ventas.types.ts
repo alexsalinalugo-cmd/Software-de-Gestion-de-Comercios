@@ -9,7 +9,12 @@ export interface DetalleVentaInput {
 export interface CrearVenta {
   id_caja: number;
   id_cliente: number | null;
-  metodo_pago: "efectivo" | "tarjeta" | "transferencia";
+  metodo_pago:
+    | "Efectivo"
+    | "Tarjeta Debito"
+    | "Tarjeta Credito"
+    | "Transferencia"
+    | "Mercado Pago";
   productos: DetalleVentaInput[];
 }
 

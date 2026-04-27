@@ -32,7 +32,6 @@ export class VentasRepository {
       );
     }
   }
-
   static async descontarStock(datos: CrearVenta): Promise<void> {
     for (const producto of datos.productos) {
       await pool.execute(
@@ -41,9 +40,14 @@ export class VentasRepository {
          LIMIT 1`,
         [producto.cantidad, producto.id_producto, producto.cantidad],
       );
+
+      await pool.execute(
+        `UPDATE productos SET stock_total = stock_total - ? 
+         WHERE id = ?`,
+        [producto.cantidad, producto.id_producto],
+      );
     }
   }
-
   static async obtenerVentasPorCaja(id_caja: number): Promise<Venta[]> {
     const [rows] = await pool.execute(
       `SELECT * FROM ventas WHERE id_caja = ?`,
@@ -54,7 +58,10 @@ export class VentasRepository {
 
   static async obtenerDetalleVenta(id_venta: number): Promise<DetalleVenta[]> {
     const [rows] = await pool.execute(
-      `SELECT * FROM detalle_venta WHERE id_venta = ?`,
+      `SELECT dv.*, p.nombre 
+       FROM detalle_venta dv
+       JOIN productos p ON dv.id_producto = p.id
+       WHERE dv.id_venta = ?`,
       [id_venta],
     );
     return rows as DetalleVenta[];

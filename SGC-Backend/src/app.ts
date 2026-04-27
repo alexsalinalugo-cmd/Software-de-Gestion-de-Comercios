@@ -2,6 +2,7 @@ import http from "http";
 import { productoRoutes } from "./modules/productos/producto.routers";
 import { cajaRoutes } from "./modules/caja/caja.routers";
 import { ventasRoutes } from "./modules/ventas/ventas.routers";
+import { reportesVentasRoutes } from "./modules/reportes/ventas/reportes-ventas.reuters";
 
 export const server = http.createServer(async (req, res) => {
   const { url } = req;
@@ -31,6 +32,10 @@ export const server = http.createServer(async (req, res) => {
   // 3. Rutas de Ventas
   if (url?.startsWith("/api/ventas")) {
     return await ventasRoutes(req, res);
+  }
+  // 4. Rutas de Reportes de Ventas
+  if (url?.startsWith("/api/reportes/ventas")) {
+    return await reportesVentasRoutes(req, res);
   }
 
   // Manejo de errores 404 global

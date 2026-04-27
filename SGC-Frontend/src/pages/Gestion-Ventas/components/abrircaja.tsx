@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { AbrirCajaInput } from "../../interfaces/caja";
+import type { AbrirCajaInput, Caja } from "../../interfaces/caja";
 
 interface Props {
-  onCajaAbierta: (id_caja: number) => void;
+  onCajaAbierta: (id_caja: number, caja: Caja) => void;
 }
 
 export default function AbrirCaja({ onCajaAbierta }: Props) {
@@ -32,7 +32,7 @@ export default function AbrirCaja({ onCajaAbierta }: Props) {
 
       if (res.ok) {
         const caja = await res.json();
-        onCajaAbierta(caja.id);
+        onCajaAbierta(caja.id, caja);
       } else {
         const err = await res.json();
         setError(err.mensaje);
