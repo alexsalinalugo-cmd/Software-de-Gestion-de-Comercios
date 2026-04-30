@@ -6,6 +6,9 @@ const EditarComponent = ({
   Producto,
   onActualizar,
   onClose,
+  CategoriasProp,
+  ProveedorProp,
+  MarcasProp,
 }: EditarProducto) => {
   const [Escaner, setEscaner] = useState<boolean>(false);
   const [QrResultado, setQrResultado] = useState(Producto.codigo_barra || "");
@@ -57,18 +60,42 @@ const EditarComponent = ({
             Producto Nuevo
           </h1>
 
-          <div className="flex-col w-full ">
-            <label className="text-gray-400 text-[15px] font-black">
-              Nombre
-            </label>
-            <input
-              type="text"
-              placeholder="Nombre Producto"
-              name="nombre"
-              className="p-2 bg-gray-800/30 rounded w-full text-white"
-              defaultValue={Producto.nombre}
-              required
-            />
+          <div className="flex gap-2 w-full ">
+            <div className="flex flex-col flex-1 min-w-0">
+              <label className="text-gray-400 text-[15px] font-black  ">
+                Nombre
+              </label>
+              <input
+                type="text"
+                placeholder="Nombre Producto"
+                name="nombre"
+                className="p-2 bg-gray-800/30 rounded  text-white"
+                defaultValue={Producto.nombre}
+              />
+            </div>
+            <div className="flex flex-col flex-1 min-w-0">
+              <label className="text-gray-400 text-[15px] font-black">
+                Marca
+              </label>
+              <select
+                name="id_marca"
+                className="p-2 bg-gray-800/30 rounded text-white"
+                defaultValue={Producto.id_marca}
+              >
+                <option value="" className="bg-gray-800 hover:bg-gray-900">
+                  Seleccionar...
+                </option>
+                {MarcasProp.map((mr) => (
+                  <option
+                    key={mr.id}
+                    value={mr.id}
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    {mr.nombre} {mr.id === Producto.id_marca ? " (Actual)" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex gap-2 w-full">
@@ -206,28 +233,53 @@ const EditarComponent = ({
           <div className="flex gap-2">
             <div className="flex flex-col flex-1 min-w-0 text-center">
               <label className="text-gray-400 text-[15px] font-black ">
-                Elegi/Crea categoria
+                Elegi categoria
               </label>
-              <input
-                type="text"
-                placeholder="Eje(carpinteria)"
-                name="categoria_nombre"
+
+              <select
+                name="id_categoria"
                 className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.categoria_nombre}
-              />
+                defaultValue={Producto.id_categoria}
+              >
+                <option value="" className="bg-gray-800 hover:bg-gray-900">
+                  Seleccionar...
+                </option>
+                {CategoriasProp.map((cat) => (
+                  <option
+                    key={cat.id}
+                    value={cat.id}
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    {cat.nombre}
+                    {cat.id === Producto.id_categoria ? " (Actual)" : ""}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex flex-col flex-1 min-w-0 text-center">
               <label className="text-gray-400 text-[15px] font-black ">
-                Elegi/Crea Proveedor
+                Elegi Proveedor
               </label>
-              <input
-                type="text"
-                placeholder="Eje(Distribuidora 'Sol')"
-                name="proveedor_nombre"
+              <select
+                name="id_proveedor"
                 className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.proveedor_nombre}
-              />
+                defaultValue={Producto.id_proveedor}
+              >
+                <option value="" className="bg-gray-800 hover:bg-gray-900">
+                  Seleccionar...
+                </option>
+                {ProveedorProp.map((pr) => (
+                  <option
+                    key={pr.id}
+                    value={pr.id}
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    {pr.nombre}
+                    {pr.id === Producto.id_proveedor ? " (Actual)" : ""}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

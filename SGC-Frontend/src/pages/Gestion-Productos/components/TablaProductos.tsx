@@ -12,7 +12,8 @@ const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
       <table className="w-full text-white border-collapse  bg-gray-900/20 rounded-xl ">
         <thead>
           <tr className="bg-[#1a1c23] text-left text-[17px] font-black text-gray-400">
-            <th className="p-3 w-100">Producto</th>
+            <th className="p-3 w-50">Producto</th>
+            <th className="p-3 w-50">Marca</th>
             <th className="p-3">Precio-Costo</th>
             <th className="p-3">Precio-Venta</th>
             <th className="p-3">Unidad-Medida</th>
@@ -36,7 +37,10 @@ const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
                 key={producto.id}
                 className="border-b border-gray-700 hover:bg-gray-800/50"
               >
-                <td className="p-3 font-bold ">{producto.nombre}</td>
+                <td className="p-3 font-bold capitalize">{producto.nombre}</td>
+                <td className="p-3 font-bold capitalize">
+                  {producto.marca_nombre}
+                </td>
                 <td className="p-3">
                   {Number(producto.precio_costo).toLocaleString("es-AR", {
                     style: "currency",
@@ -61,7 +65,7 @@ const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
                   </span>
                 </td>
                 <td className="p-3">
-                  <span className="bg-gray-700/40 text-gray-200 px-2 py-1 rounded text-xs ">
+                  <span className="bg-gray-700/40 text-gray-200 px-2 py-1 rounded text-xs capitalize">
                     {producto.categoria_nombre}
                   </span>
                 </td>
@@ -73,7 +77,7 @@ const TablaProductos = ({ datos, onEditar, onEliminar }: TablaProducto) => {
                     {EstadoStock ? "Crítico" : "Normal"}
                   </span>
                 </td>
-                <td className="p-3 ">{producto.proveedor_nombre}</td>
+                <td className="p-3 capitalize">{producto.proveedor_nombre}</td>
                 <td className="p-3 flex gap-2">
                   <div className="flex flex-col ">
                     <button

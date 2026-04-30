@@ -12,10 +12,11 @@ const DetallesComponent = ({ producto, onClose }: Detalles) => {
           ✕ Cerrar
         </button>
 
-        <div className="space-y-3 text-center">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            {producto.nombre}
-          </h2>
+        <div className="space-y-3 text-center ">
+          <div className="text-2xl font-bold text-white mb-6 flex-col flex capitalize">
+            <div>{producto.nombre}</div>
+            <div> {producto.marca_nombre}</div>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gray-800/50 p-4 rounded-lg">
               <p className="text-gray-400 text-xs uppercase">Stock Mínimo</p>

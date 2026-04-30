@@ -4,9 +4,19 @@ import type { Producto } from "../../interfaces/Producto";
 import QRScanner from "../../../components/Escaner.tsx";
 import BotonAgregar from "../../../components/BotonAgregar.tsx";
 
-export default function AgregarComponent({ onAgregar }: AgregarProducto) {
+export default function AgregarComponent({
+  onAgregar,
+  CategoriasProp,
+  ProveedorProp,
+  MarcasProp,
+  UbicacionesProp,
+}: AgregarProducto) {
   const [Formulario, setFormulario] = useState<boolean>(false);
   const [Escaner, setEscaner] = useState<boolean>(false);
+  const [EsNuevaCategoria, setEsNuevaCategoria] = useState<boolean>(false);
+  const [EsNuevoProveedor, setEsnuevoProveedor] = useState<boolean>(false);
+  const [EsNuevoMarca, setEsnuevoMarca] = useState<boolean>(false);
+  const [EsnuevaUbicacion, setEsnuevaUbicacion] = useState<boolean>(false);
   const [QrResultado, setQrResultado] = useState<string>("");
 
   const NuevoProducto = (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,6 +31,7 @@ export default function AgregarComponent({ onAgregar }: AgregarProducto) {
       precio_venta: Number(valores.precio_venta),
       stock_total: Number(valores.stock_total),
       stock_minimo: Number(valores.stock_minimo),
+      id_marca: Number(valores.id_marca),
       id_categoria: Number(valores.id_categoria),
       id_proveedor: Number(valores.id_proveedor),
       id_ubicacion: Number(valores.id_ubicacion),
@@ -34,7 +45,7 @@ export default function AgregarComponent({ onAgregar }: AgregarProducto) {
     setQrResultado(Qr);
     setEscaner(!Escaner);
   };
-
+  console.log("Ubicaciones:", UbicacionesProp);
   return (
     <div>
       {Formulario ? (
@@ -51,17 +62,60 @@ export default function AgregarComponent({ onAgregar }: AgregarProducto) {
           >
             <h1 className="text-2xl text-center font-black"> Producto Nuevo</h1>
 
-            <div className="flex-col w-full ">
-              <label className="text-gray-400 text-[15px] font-black">
-                Nombre
-              </label>
-              <input
-                type="text"
-                placeholder="Nombre Producto"
-                name="nombre"
-                className="p-2 bg-gray-800/30 rounded w-full"
-                required
-              />
+            <div className="flex gap-2 w-full ">
+              <div className="flex flex-col flex-1 min-w-0">
+                <label className="text-gray-400 text-[15px] font-black  my-2">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nombre Producto"
+                  name="nombre"
+                  className="p-2 bg-gray-800/30 rounded "
+                  required
+                />
+              </div>
+              <div className="flex flex-col flex-1 min-w-0">
+                <div className="flex justify-between items-center my-2">
+                  <label className="text-gray-400 text-[15px] font-black">
+                    Marca
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setEsnuevoMarca(!EsNuevoMarca)}
+                    className="text-[15px] text-blue-400 underline"
+                  >
+                    {EsNuevoMarca ? "Elegir Marca" : "+ Nueva Marca"}
+                  </button>
+                </div>
+                {EsNuevoMarca ? (
+                  <input
+                    type="text"
+                    placeholder="Eje(Calchaqui)"
+                    name="marca_nombre"
+                    className="p-2 bg-gray-800/30 rounded"
+                  />
+                ) : (
+                  <select
+                    name="id_marca"
+                    className="p-2 bg-gray-800/30 rounded text-white"
+                    required
+                  >
+                    <option value="" className="bg-gray-800 hover:bg-gray-900">
+                      Seleccionar...
+                    </option>
+                    {MarcasProp.map((mr) => (
+                      <option
+                        key={mr.id}
+                        value={mr.id}
+                        className="bg-gray-800 hover:bg-gray-900"
+                      >
+                        {mr.nombre}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
             </div>
 
             <div className="flex gap-2 w-full">
@@ -165,53 +219,152 @@ export default function AgregarComponent({ onAgregar }: AgregarProducto) {
 
             <div className="flex gap-2">
               <div className="flex flex-col flex-1 min-w-0 gap-2 ">
-                <label className="text-gray-400 text-[15px] font-black text-center ">
-                  ¿Donde esta?
-                </label>
-                <input
-                  type="text"
-                  placeholder="Sector ejemplo(Pasillo 'A')"
-                  name="ubicacion_sector"
-                  className="p-2 bg-gray-800/30 rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Estanteria ejemplo(Estante 3)"
-                  name="ubicacion_estanteria"
-                  className="p-2 bg-gray-800/30 rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Posicion ejemplo(Arribe a ala izquierda)"
-                  name="ubicacion_posicion"
-                  className="p-2 bg-gray-800/30 rounded"
-                />
+                <div className="flex justify-between items-center my-2">
+                  <label className="text-gray-400 text-[15px] font-black text-center ">
+                    ¿Donde esta?
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setEsnuevaUbicacion(!EsnuevaUbicacion)}
+                    className="text-[15px] text-blue-400 underline"
+                  >
+                    {EsnuevaUbicacion
+                      ? "Elegir Ubicacion"
+                      : "+ Nueva Ubicacion"}
+                  </button>
+                </div>
+                {EsnuevaUbicacion ? (
+                  <div className="flex flex-col gap-2">
+                    <input
+                      type="text"
+                      placeholder="Sector ejemplo(Pasillo 'A')"
+                      name="ubicacion_sector"
+                      className="p-2 bg-gray-800/30 rounded"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Estanteria ejemplo(Estante 3)"
+                      name="ubicacion_estanteria"
+                      className="p-2 bg-gray-800/30 rounded"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Posicion ejemplo(Arribe a ala izquierda)"
+                      name="ubicacion_posicion"
+                      className="p-2 bg-gray-800/30 rounded"
+                    />
+                  </div>
+                ) : (
+                  <select
+                    name="id_ubicacion"
+                    className="p-2 bg-gray-800/30 rounded text-white"
+                    required
+                  >
+                    <option value="" className="bg-gray-800 hover:bg-gray-900">
+                      Seleccionar...
+                    </option>
+                    {UbicacionesProp.map((ubi) => (
+                      <option
+                        key={ubi.id}
+                        value={ubi.id}
+                        className="bg-gray-800 hover:bg-gray-900"
+                      >
+                        {ubi.sector} {ubi.estanteria} {ubi.posicion}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 
             <div className="flex gap-2">
-              <div className="flex flex-col flex-1 min-w-0 text-center">
-                <label className="text-gray-400 text-[15px] font-black ">
-                  Elegi/Crea categoria
-                </label>
-                <input
-                  type="text"
-                  placeholder="Eje(carpinteria)"
-                  name="categoria_nombre"
-                  className="p-2 bg-gray-800/30 rounded"
-                />
+              <div className="flex flex-col flex-1 min-w-0 text-center ">
+                <div className="flex justify-between items-center my-2">
+                  <label className="text-gray-400 text-[15px] font-black ">
+                    Elegi/Crea categoria
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setEsNuevaCategoria(!EsNuevaCategoria)}
+                    className="text-[15px] text-blue-400 underline"
+                  >
+                    {EsNuevaCategoria
+                      ? "Elegir Categoria"
+                      : "+ Nueva Categoria"}
+                  </button>
+                </div>
+                {EsNuevaCategoria ? (
+                  <input
+                    type="text"
+                    placeholder="Eje(carpinteria)"
+                    name="categoria_nombre"
+                    className="p-2 bg-gray-800/30 rounded"
+                  />
+                ) : (
+                  <select
+                    name="id_categoria"
+                    className="p-2 bg-gray-800/30 rounded text-white"
+                    required
+                  >
+                    <option value="" className="bg-gray-800 hover:bg-gray-900">
+                      Seleccionar...
+                    </option>
+                    {CategoriasProp.map((cat) => (
+                      <option
+                        key={cat.id}
+                        value={cat.id}
+                        className="bg-gray-800 hover:bg-gray-900"
+                      >
+                        {cat.nombre}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <div className="flex flex-col flex-1 min-w-0 text-center">
-                <label className="text-gray-400 text-[15px] font-black ">
-                  Elegi/Crea Proveedor
-                </label>
-                <input
-                  type="text"
-                  placeholder="Eje(Distribuidora 'Sol')"
-                  name="proveedor_nombre"
-                  className="p-2 bg-gray-800/30 rounded"
-                />
+                <div className="flex justify-between items-center my-2">
+                  <label className="text-gray-400 text-[15px] font-black  ">
+                    Elegi/Crea Proveedor
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setEsnuevoProveedor(!EsNuevoProveedor)}
+                    className="text-[15px] text-blue-400 underline"
+                  >
+                    {EsNuevoProveedor
+                      ? "Elegir Proveedor"
+                      : "+ Nueva Proveedor"}
+                  </button>
+                </div>
+
+                {EsNuevoProveedor ? (
+                  <input
+                    type="text"
+                    placeholder="Eje(Distribuidora 'Sol')"
+                    name="proveedor_nombre"
+                    className="p-2 bg-gray-800/30 rounded"
+                  />
+                ) : (
+                  <select
+                    name="id_proveedor"
+                    className="p-2 bg-gray-800/30 rounded text-white"
+                    required
+                  >
+                    <option value="" className="bg-gray-800 hover:bg-gray-900">
+                      Seleccionar...
+                    </option>
+                    {ProveedorProp.map((pr) => (
+                      <option
+                        key={pr.id}
+                        value={pr.id}
+                        className="bg-gray-800 hover:bg-gray-900"
+                      >
+                        {pr.nombre}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 

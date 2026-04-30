@@ -56,7 +56,7 @@ export class ReportesVentasRepository {
       `SELECT v.id, v.fecha, v.total, v.metodo_pago, v.id_caja,
         COUNT(dv.id) AS cantidad_productos
        FROM ventas v
-       LEFT JOIN detalle_venta dv ON v.id = dv.id_venta
+       LEFT JOIN detalle_ventas dv ON v.id = dv.id_venta
        ${filtro}
        GROUP BY v.id
        ORDER BY v.fecha DESC`,

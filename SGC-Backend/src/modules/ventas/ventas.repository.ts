@@ -21,7 +21,7 @@ export class VentasRepository {
   ): Promise<void> {
     for (const producto of datos.productos) {
       await pool.execute(
-        `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario) 
+        `INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario) 
          VALUES (?, ?, ?, ?)`,
         [
           id_venta,
@@ -59,7 +59,7 @@ export class VentasRepository {
   static async obtenerDetalleVenta(id_venta: number): Promise<DetalleVenta[]> {
     const [rows] = await pool.execute(
       `SELECT dv.*, p.nombre 
-       FROM detalle_venta dv
+       FROM detalle_ventas dv
        JOIN productos p ON dv.id_producto = p.id
        WHERE dv.id_venta = ?`,
       [id_venta],

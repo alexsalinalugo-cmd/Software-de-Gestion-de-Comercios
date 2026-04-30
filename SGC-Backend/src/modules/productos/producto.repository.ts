@@ -7,14 +7,15 @@ import { ManagerErrors } from "../../shared/errors/AppErrors";
 export class ProductoRepository {
   static async getAll(): Promise<Producto[]> {
     const [rows] = await pool.query(`
-      SELECT p.*,
+      SELECT p.*,mr.id AS id_marca ,mr.nombre AS marca_nombre,
       c.id AS id_categoria,c.nombre AS categoria_nombre,
       pr.id AS id_proveedor,pr.nombre AS proveedor_nombre,
       ubi.sector , ubi.estanteria, ubi.posicion
       FROM productos p 
-      LEFT JOIN categoria c ON p.id_categoria = c.id
+      LEFT JOIN categorias c ON p.id_categoria = c.id
       LEFT JOIN proveedores pr ON p.id_proveedor = pr.id
       LEFT JOIN ubicaciones ubi ON p.id_ubicacion = ubi.id
+      LEFT JOIN marcas mr ON p.id_marca = mr.id 
       WHERE p.activo = 1
       
       `);
@@ -36,6 +37,7 @@ export class ProductoRepository {
       id_categoria,
       id_proveedor,
       id_ubicacion,
+      id_marca,
     } = datos;
 
     const Qr_code = codigo_barra === "" ? null : codigo_barra; // Si el qr_code es una cadena vacía, lo convertimos a null para que la base de datos lo acepte como un valor nulo.
@@ -44,8 +46,8 @@ export class ProductoRepository {
     //y metadatos y como solo nos inporta la primera hacemos [variable] que ocupa el primer indice del array [0,1]
     const [Resultado] = await conexion.execute<ResultSetHeader>(
       `INSERT INTO productos 
-      (nombre, precio_costo, precio_venta, unidad_medida, stock_total, stock_minimo, codigo_barra, id_ubicacion, id_proveedor, id_categoria) 
-      VALUES (?,?,?,?,?,?,?,?,?,?)`,
+      (nombre, precio_costo, precio_venta, unidad_medida, stock_total, stock_minimo, codigo_barra,id_marca,id_ubicacion, id_proveedor, id_categoria ) 
+      VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
       [
         nombre,
         precio_costo,
@@ -54,6 +56,7 @@ export class ProductoRepository {
         stock_total,
         stock_minimo,
         Qr_code ?? null, // Si es undefined, pasa null
+        id_marca ?? null,
         id_ubicacion ?? null, // Si es undefined, pasa null
         id_proveedor ?? null, // Si es undefined, pasa null
         id_categoria ?? null, // Si es undefined, pasa null
@@ -64,41 +67,6 @@ export class ProductoRepository {
       return Resultado.insertId;
     }
     throw new ManagerErrors("No se pudo insertar el producto", 400);
-  }
-
-  static async CrearCategoria(
-    conexion: PoolConnection,
-    nombre: string,
-  ): Promise<number> {
-    const [res]: any = await conexion.execute(
-      "INSERT INTO categoria (nombre) VALUES (?)",
-      [nombre],
-    );
-    return res.insertId;
-  }
-
-  static async CrearProveedores(
-    conexion: PoolConnection,
-    nombre: string,
-  ): Promise<number> {
-    const [res]: any = await conexion.execute(
-      "INSERT INTO proveedores (nombre) VALUES (?)",
-      [nombre],
-    );
-    return res.insertId;
-  }
-
-  static async CrearUbicacion(
-    conexion: PoolConnection,
-    sector: string,
-    estanteria: string | undefined,
-    posicion: string | undefined,
-  ): Promise<number> {
-    const [res]: any = await conexion.execute(
-      "INSERT INTO ubicaciones (sector,estanteria,posicion) VALUES (?,?,?)",
-      [sector, estanteria || null, posicion || null],
-    );
-    return res.insertId;
   }
 
   static async insertarStock(
@@ -118,11 +86,16 @@ export class ProductoRepository {
   ): Promise<Producto> {
     const [rows] = await conexion.execute<RowDataPacket[]>(
       `
-      SELECT p.*,c.nombre AS categoria_nombre, pr.nombre AS proveedor_nombre, ubi.sector , ubi.estanteria, ubi.posicion
+      SELECT p.*,
+      mr.id AS id_marca ,mr.nombre AS marca_nombre,
+      c.nombre AS categoria_nombre,
+      pr.nombre AS proveedor_nombre, 
+      ubi.sector , ubi.estanteria, ubi.posicion
       FROM productos p 
-      LEFT JOIN categoria c ON p.id_categoria = c.id
+      LEFT JOIN categorias c ON p.id_categoria = c.id
       LEFT JOIN proveedores pr ON p.id_proveedor = pr.id
       LEFT JOIN ubicaciones ubi ON p.id_ubicacion = ubi.id
+      LEFT JOIN marcas mr ON p.id_marca = mr.id 
       WHERE p.id=?
 
       `,
@@ -161,6 +134,7 @@ export class ProductoRepository {
       stock_total,
       stock_minimo,
       codigo_barra,
+      id_marca,
       id_ubicacion,
       id_proveedor,
       id_categoria,
@@ -176,6 +150,7 @@ export class ProductoRepository {
      stock_total = ?,
      stock_minimo = ?,
      codigo_barra = ?,
+     id_marca = ?,
      id_ubicacion = ?,
      id_proveedor = ?,
      id_categoria = ?
@@ -188,6 +163,7 @@ export class ProductoRepository {
         stock_total,
         stock_minimo,
         Qr_code,
+        id_marca ?? null,
         id_ubicacion ?? null,
         id_proveedor ?? null,
         id_categoria ?? null,
@@ -204,19 +180,6 @@ export class ProductoRepository {
     return id;
   }
 
-  static async ActualizarUbicacion(
-    conexion: PoolConnection,
-    id: number,
-    sector: string,
-    estanteria: string,
-    posicion: string,
-  ): Promise<number> {
-    const [Ubicacion_update] = await conexion.execute(
-      "UPDATE ubicaciones SET sector = ?, estanteria = ?, posicion = ? WHERE id = ?",
-      [sector || null, estanteria || null, posicion || null, id],
-    );
-    return id;
-  }
   static async ActualizarStock(
     conexion: PoolConnection,
     idPro: number,

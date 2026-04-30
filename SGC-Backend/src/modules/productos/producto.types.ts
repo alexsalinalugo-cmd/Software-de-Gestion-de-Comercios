@@ -1,6 +1,8 @@
 export interface Producto {
   id: number;
   nombre: string;
+  id_marca: number;
+  marca_nombre: string;
   precio_costo: number;
   precio_venta: number;
   unidad_medida: string;
@@ -19,6 +21,8 @@ export interface Producto {
 
 export interface CrearProducto {
   nombre: string;
+  id_marca: number | null;
+  marca_nombre: string;
   precio_costo: number;
   precio_venta: number;
   unidad_medida: string;
