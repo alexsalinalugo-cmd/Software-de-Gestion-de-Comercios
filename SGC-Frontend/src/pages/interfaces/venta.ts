@@ -4,11 +4,15 @@ export interface DetalleVentaInput {
   cantidad: number;
   precio_unitario: number;
 }
-
 export interface CrearVentaInput {
   id_caja: number;
   id_cliente: number | null;
-  metodo_pago: "efectivo" | "tarjeta" | "transferencia";
+  metodo_pago:
+    | "Efectivo"
+    | "Tarjeta Debito"
+    | "Tarjeta Credito"
+    | "Transferencia"
+    | "Mercado Pago";
   productos: DetalleVentaInput[];
 }
 
@@ -19,4 +23,13 @@ export interface Venta {
   total: number;
   fecha: string;
   metodo_pago: string;
+}
+
+export interface ModificarDetalleVenta {
+  id_detalle: number;
+  cantidad_nueva: number;
+  cantidad_anterior: number;
+  id_producto: number;
+  precio_unitario: number;
+  id_venta: number;
 }

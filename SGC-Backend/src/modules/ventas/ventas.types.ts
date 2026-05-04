@@ -36,3 +36,12 @@ export interface Venta {
   fecha: Date;
   metodo_pago: "efectivo" | "tarjeta" | "transferencia";
 }
+
+export interface ModificarDetalleVenta {
+  id_detalle: number;
+  cantidad_nueva: number;
+  cantidad_anterior: number;
+  id_producto: number;
+  precio_unitario: number;
+  id_venta: number;
+}

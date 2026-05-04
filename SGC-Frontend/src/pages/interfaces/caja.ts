@@ -7,6 +7,10 @@ export interface Caja {
   estado: "abierta" | "cerrada";
 }
 
+export interface CerrarCaja {
+  id_caja: number;
+  monto_cierre: number;
+}
 export interface AbrirCajaInput {
   monto_apertura: number;
 }

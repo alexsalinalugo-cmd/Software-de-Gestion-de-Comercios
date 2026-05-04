@@ -72,4 +72,27 @@ export class VentasController {
       }
     }
   }
+
+  static async modificarDetalleVenta(
+    req: IncomingMessage,
+    res: ServerResponse,
+  ): Promise<void> {
+    try {
+      const datosParseados = await parsearBody(req);
+      await VentasService.modificarDetalleVenta(datosParseados);
+      res.writeHead(200);
+      res.end(JSON.stringify({ mensaje: "Detalle actualizado correctamente" }));
+    } catch (error: any) {
+      if (
+        error.message === "La cantidad debe ser mayor a cero" ||
+        error.message === "La cantidad nueva debe ser menor a la anterior"
+      ) {
+        res.writeHead(400);
+        res.end(JSON.stringify({ mensaje: error.message }));
+      } else {
+        res.writeHead(500);
+        res.end(JSON.stringify({ mensaje: "Error interno del servidor" }));
+      }
+    }
+  }
 }

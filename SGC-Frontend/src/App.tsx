@@ -5,6 +5,9 @@ import Silebar from "../src/components/layouts/Silebar";
 import Ventas from "../src/pages/Gestion-Ventas/ventas";
 import Reportes from "../src/pages/Gestion-Reportes/Reportes";
 import ReporteVentas from "../src/pages/Gestion-Reportes/components/ReporteVentas";
+import ReporteProductos from "../src/pages/Gestion-Reportes/components/ReporteProductos";
+import ReporteCategorias from "../src/pages/Gestion-Reportes/components/ReporteCategorias";
+import ReporteProveedores from "../src/pages/Gestion-Reportes/components/ReporteProveedores";
 function App() {
   return (
     <div>
@@ -15,6 +18,18 @@ function App() {
         <Route path="/GestionVentas" element={<Ventas />}></Route>
         <Route path="/Reportes" element={<Reportes />}></Route>
         <Route path="/Reportes/Ventas" element={<ReporteVentas />}></Route>
+        <Route
+          path="/Reportes/Productos"
+          element={<ReporteProductos />}
+        ></Route>
+        <Route
+          path="/Reportes/Categorias"
+          element={<ReporteCategorias />}
+        ></Route>
+        <Route
+          path="/Reportes/Proveedores"
+          element={<ReporteProveedores />}
+        ></Route>
       </Routes>
     </div>
   );

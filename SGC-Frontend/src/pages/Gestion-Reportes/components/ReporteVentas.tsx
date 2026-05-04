@@ -3,6 +3,10 @@ import type {
   ReporteVentas,
   VentaHistorial,
 } from "../../interfaces/reporteventas";
+import {
+  ReporteVentasService,
+  type DetalleReporteVenta,
+} from "../../../services/Gestion-ReportesServices/ReporteVentasService";
 
 export default function ReporteVentas() {
   const [reporte, setReporte] = useState<ReporteVentas | null>(null);
@@ -10,21 +14,20 @@ export default function ReporteVentas() {
   const [cargando, setCargando] = useState<boolean>(true);
   const [ventaSeleccionada, setVentaSeleccionada] =
     useState<VentaHistorial | null>(null);
-  const [detalle, setDetalle] = useState<any[]>([]);
+  const [detalle, setDetalle] = useState<DetalleReporteVenta[]>([]);
+  const [editando, setEditando] = useState<number | null>(null);
+  const [cantidadNueva, setCantidadNueva] = useState<string>("");
+  const [totalActual, setTotalActual] = useState<number>(0);
 
   useEffect(() => {
     const obtenerReporte = async () => {
       setCargando(true);
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/reportes/ventas?periodo=${periodo}`,
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setReporte(data);
-        }
+        const data = await ReporteVentasService.ObtenerReporte(periodo);
+        setReporte(data);
       } catch (error) {
         console.log(error);
+        setReporte(null);
       } finally {
         setCargando(false);
       }
@@ -34,14 +37,43 @@ export default function ReporteVentas() {
 
   const verDetalle = async (venta: VentaHistorial) => {
     setVentaSeleccionada(venta);
+    setTotalActual(Number(venta.total));
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/ventas/${venta.id}/detalle`,
+      const data = await ReporteVentasService.ObtenerDetalleVenta(venta.id);
+      setDetalle(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleModificar = async (item: DetalleReporteVenta) => {
+    console.log("ejecutando", item, cantidadNueva);
+    if (!cantidadNueva || Number(cantidadNueva) <= 0) return;
+    if (Number(cantidadNueva) >= Number(item.cantidad)) return;
+    console.log("pasó las validaciones, haciendo fetch");
+    try {
+      await ReporteVentasService.ModificarDetalleVenta({
+        id_detalle: item.id,
+        cantidad_nueva: Number(cantidadNueva),
+        cantidad_anterior: Number(item.cantidad),
+        id_producto: item.id_producto,
+        precio_unitario: Number(item.precio_unitario),
+        id_venta: Number(ventaSeleccionada?.id),
+      });
+
+      const detalleActualizado = detalle.map((d) =>
+        d.id === item.id ? { ...d, cantidad: Number(cantidadNueva) } : d,
       );
-      if (res.ok) {
-        const data = await res.json();
-        setDetalle(data);
-      }
+      setDetalle(detalleActualizado);
+
+      const nuevoTotal = detalleActualizado.reduce(
+        (suma, d) => suma + Number(d.cantidad) * Number(d.precio_unitario),
+        0,
+      );
+      setTotalActual(nuevoTotal);
+
+      setEditando(null);
+      setCantidadNueva("");
     } catch (error) {
       console.log(error);
     }
@@ -218,6 +250,7 @@ export default function ReporteVentas() {
                 onClick={() => {
                   setVentaSeleccionada(null);
                   setDetalle([]);
+                  setEditando(null);
                 }}
                 className="text-gray-400 hover:text-white"
               >
@@ -231,9 +264,9 @@ export default function ReporteVentas() {
                   key={item.id}
                   className="flex justify-between items-center border-b border-gray-700 pb-3"
                 >
-                  <div>
+                  <div className="flex-1">
                     <p className="text-white text-sm font-bold">
-                      Producto #{item.id_producto}
+                      {item.nombre}
                     </p>
                     <p className="text-gray-400 text-xs">
                       {Number(item.cantidad)} x{" "}
@@ -243,14 +276,54 @@ export default function ReporteVentas() {
                       })}
                     </p>
                   </div>
-                  <p className="text-yellow-400 font-black">
-                    {(
-                      Number(item.cantidad) * Number(item.precio_unitario)
-                    ).toLocaleString("es-AR", {
-                      style: "currency",
-                      currency: "ARS",
-                    })}
-                  </p>
+
+                  {editando === item.id ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={cantidadNueva}
+                        onChange={(e) => setCantidadNueva(e.target.value)}
+                        placeholder="Nueva cant."
+                        className="w-24 p-1 rounded bg-[#2a2d3a] text-white border border-gray-600 text-xs"
+                        autoFocus
+                      />
+                      <button
+                        onClick={() => handleModificar(item)}
+                        className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs hover:bg-green-500/40"
+                      >
+                        ✓
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditando(null);
+                          setCantidadNueva("");
+                        }}
+                        className="bg-red-500/20 text-red-400 px-2 py-1 rounded text-xs hover:bg-red-500/40"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <p className="text-yellow-400 font-black">
+                        {(
+                          Number(item.cantidad) * Number(item.precio_unitario)
+                        ).toLocaleString("es-AR", {
+                          style: "currency",
+                          currency: "ARS",
+                        })}
+                      </p>
+                      <button
+                        onClick={() => {
+                          setEditando(item.id);
+                          setCantidadNueva("");
+                        }}
+                        className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded text-xs hover:bg-yellow-500/40"
+                      >
+                        Editar
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -258,7 +331,7 @@ export default function ReporteVentas() {
             <div className="flex justify-between items-center border-t border-gray-700 pt-4">
               <span className="text-gray-400 font-bold">TOTAL</span>
               <span className="text-white font-black text-xl">
-                {Number(ventaSeleccionada.total).toLocaleString("es-AR", {
+                {totalActual.toLocaleString("es-AR", {
                   style: "currency",
                   currency: "ARS",
                 })}

@@ -5,6 +5,8 @@ import type { Caja } from "../interfaces/caja";
 import AbrirCaja from "./components/abrircaja";
 import ListaProductos from "./components/ListaProductos";
 import Carrito from "./components/Carrito";
+import { VentasServices } from "../../services/Gestion-VentasServices";
+import { ProductosServices } from "../../services/Gestion-ProductosServices";
 
 export default function GestionVentas() {
   const [idCaja, setIdCaja] = useState<number | null>(null);
@@ -29,21 +31,16 @@ export default function GestionVentas() {
     const obtenerDatos = async () => {
       setCargando(true);
       try {
-        const [resProductos, resCaja, resVentas] = await Promise.all([
-          fetch("http://localhost:3000/api/productos/mostrar"),
-          fetch(`http://localhost:3000/api/caja/estado/${idCaja}`),
-          fetch(`http://localhost:3000/api/ventas/caja/${idCaja}`),
+        const [productosData, cajaData, ventasData] = await Promise.all([
+          ProductosServices.ObtenerTodos(),
+          VentasServices.obtenerEstadoCaja(idCaja),
+          VentasServices.obtenerVentasPorCaja(idCaja),
         ]);
 
-        if (resProductos.ok) setProductos(await resProductos.json());
-
-        if (resCaja.ok) {
-          const cajaData = await resCaja.json();
-          setCaja(cajaData);
-          setCambioDisponible(Number(cajaData.monto_apertura));
-        }
-
-        if (resVentas.ok) setVentas(await resVentas.json());
+        setProductos(productosData);
+        setCaja(cajaData);
+        setCambioDisponible(Number(cajaData.monto_apertura));
+        setVentas(ventasData);
       } catch (error) {
         console.log(error);
       } finally {
@@ -68,19 +65,13 @@ export default function GestionVentas() {
 
   const handleCerrarCaja = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/caja/cerrar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_caja: idCaja, monto_cierre: 0 }),
-      });
-      if (res.ok) {
-        localStorage.removeItem("id_caja");
-        setIdCaja(null);
-        setCaja(null);
-        setCarrito([]);
-        setVentas([]);
-        setCambioDisponible(0);
-      }
+      await VentasServices.cerrarCaja({ id_caja: idCaja!, monto_cierre: 0 });
+      localStorage.removeItem("id_caja");
+      setIdCaja(null);
+      setCaja(null);
+      setCarrito([]);
+      setVentas([]);
+      setCambioDisponible(0);
     } catch (error) {
       console.log(error);
     }
@@ -122,34 +113,24 @@ export default function GestionVentas() {
     vuelto: number,
   ) => {
     try {
-      const res = await fetch("http://localhost:3000/api/ventas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id_caja: idCaja,
-          id_cliente: null,
-          metodo_pago,
-          productos: carrito,
-        }),
+      const nuevaVenta = await VentasServices.crearVenta({
+        id_caja: idCaja!,
+        id_cliente: null,
+        metodo_pago,
+        productos: carrito,
       });
-      if (res.ok) {
-        const nuevaVenta = await res.json();
-        setVentas((prev) => [...prev, nuevaVenta]);
 
-        if (metodo_pago === "Efectivo" && vuelto > 0) {
-          setCambioDisponible((prev) => prev - vuelto);
-        }
+      setVentas((prev) => [...prev, nuevaVenta]);
 
-        setCarrito([]);
-        mostrarNotificacion("✅ Venta registrada correctamente");
-
-        const resProductos = await fetch(
-          "http://localhost:3000/api/productos/mostrar",
-        );
-        if (resProductos.ok) {
-          setProductos(await resProductos.json());
-        }
+      if (metodo_pago === "Efectivo" && vuelto > 0) {
+        setCambioDisponible((prev) => prev - vuelto);
       }
+
+      setCarrito([]);
+      mostrarNotificacion("✅ Venta registrada correctamente");
+
+      const productosActualizados = await ProductosServices.ObtenerTodos();
+      setProductos(productosActualizados);
     } catch (error) {
       console.log(error);
     }

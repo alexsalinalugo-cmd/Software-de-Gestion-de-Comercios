@@ -3,6 +3,9 @@ import { productoRoutes } from "./modules/productos/producto.routers";
 import { cajaRoutes } from "./modules/caja/caja.routers";
 import { ventasRoutes } from "./modules/ventas/ventas.routers";
 import { reportesVentasRoutes } from "./modules/reportes/ventas/reportes-ventas.reuters";
+import { reportesProductosRoutes } from "./modules/reportes/productos/reportes-productos.routers";
+import { reportesCategoriasRoutes } from "./modules/reportes/categorias/reportes-categorias.routers";
+import { reportesProveedoresRoutes } from "./modules/reportes/proveedores/reportes-proveedores.routers";
 import { CategoriasRoutes } from "./modules/categorias/categorias.routers";
 import { ProveedoresRoutes } from "./modules/proveedores/proveedores.routers";
 import { MarcaRouters } from "./modules/marcas/marca.routers";
@@ -39,6 +42,15 @@ export const server = http.createServer(async (req, res) => {
   // 4. Rutas de Reportes de Ventas
   if (url?.startsWith("/api/reportes/ventas")) {
     return await reportesVentasRoutes(req, res);
+  }
+  if (url?.startsWith("/api/reportes/productos")) {
+    return await reportesProductosRoutes(req, res);
+  }
+  if (url?.startsWith("/api/reportes/categorias")) {
+    return await reportesCategoriasRoutes(req, res);
+  }
+  if (url?.startsWith("/api/reportes/proveedores")) {
+    return await reportesProveedoresRoutes(req, res);
   }
   if (url?.startsWith("/api/proveedores")) {
     return await ProveedoresRoutes(req, res);

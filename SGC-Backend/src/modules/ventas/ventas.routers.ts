@@ -18,5 +18,10 @@ export function ventasRoutes(
     VentasController.obtenerDetalleVenta(req, res);
     return true;
   }
+
+  if (req.method === "PUT" && req.url === "/api/ventas/detalle/modificar") {
+    VentasController.modificarDetalleVenta(req, res);
+    return true;
+  }
   return false;
 }

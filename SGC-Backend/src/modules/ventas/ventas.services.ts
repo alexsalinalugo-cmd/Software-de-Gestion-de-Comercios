@@ -1,6 +1,11 @@
 import { CajaRepository } from "../caja/caja.repository";
 import { VentasRepository } from "./ventas.repository";
-import { CrearVenta, DetalleVenta, Venta } from "./ventas.types";
+import {
+  CrearVenta,
+  DetalleVenta,
+  Venta,
+  ModificarDetalleVenta,
+} from "./ventas.types";
 import { pool } from "../../config/db";
 
 export class VentasService {
@@ -64,5 +69,19 @@ export class VentasService {
     }
 
     return await VentasRepository.obtenerDetalleVenta(id_venta);
+  }
+
+  static async modificarDetalleVenta(
+    datos: ModificarDetalleVenta,
+  ): Promise<void> {
+    if (datos.cantidad_nueva <= 0) {
+      throw new Error("La cantidad debe ser mayor a cero");
+    }
+
+    if (datos.cantidad_nueva >= datos.cantidad_anterior) {
+      throw new Error("La cantidad nueva debe ser menor a la anterior");
+    }
+
+    await VentasRepository.modificarDetalleVenta(datos);
   }
 }

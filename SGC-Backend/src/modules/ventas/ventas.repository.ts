@@ -1,5 +1,10 @@
 import { pool } from "../../config/db";
-import { CrearVenta, Venta, DetalleVenta } from "./ventas.types";
+import {
+  CrearVenta,
+  Venta,
+  DetalleVenta,
+  ModificarDetalleVenta,
+} from "./ventas.types";
 
 export class VentasRepository {
   static async crearVenta(datos: CrearVenta, total: number): Promise<Venta> {
@@ -32,6 +37,7 @@ export class VentasRepository {
       );
     }
   }
+
   static async descontarStock(datos: CrearVenta): Promise<void> {
     for (const producto of datos.productos) {
       await pool.execute(
@@ -65,5 +71,43 @@ export class VentasRepository {
       [id_venta],
     );
     return rows as DetalleVenta[];
+  }
+
+  static async modificarDetalleVenta(
+    datos: ModificarDetalleVenta,
+  ): Promise<void> {
+    // 1. Actualizar la cantidad en detalle_ventas
+    await pool.execute(`UPDATE detalle_ventas SET cantidad = ? WHERE id = ?`, [
+      datos.cantidad_nueva,
+      datos.id_detalle,
+    ]);
+
+    // 2. Recalcular el total
+    const [detalles] = await pool.execute(
+      `SELECT SUM(cantidad * precio_unitario) as nuevo_total 
+   FROM detalle_ventas WHERE id_venta = ?`,
+      [datos.id_venta],
+    );
+    const nuevoTotal = (detalles as any[])[0].nuevo_total;
+
+    // 3. Actualizar el total en ventas
+    await pool.execute(`UPDATE ventas SET total = ? WHERE id = ?`, [
+      nuevoTotal,
+      datos.id_venta,
+    ]);
+
+    // 4. Devolver la diferencia al stock
+    const diferencia = datos.cantidad_anterior - datos.cantidad_nueva;
+    if (diferencia > 0) {
+      await pool.execute(
+        `UPDATE stock_lotes SET cantidad_actual = cantidad_actual + ? 
+         WHERE id_producto = ? LIMIT 1`,
+        [diferencia, datos.id_producto],
+      );
+      await pool.execute(
+        `UPDATE productos SET stock_total = stock_total + ? WHERE id = ?`,
+        [diferencia, datos.id_producto],
+      );
+    }
   }
 }

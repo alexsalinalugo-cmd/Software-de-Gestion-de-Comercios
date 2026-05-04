@@ -14,7 +14,7 @@ export class CajaRepository {
   }
 
   static async obtenerCajaPorId(id: number): Promise<Caja | null> {
-    const [rows] = await pool.execute(`SELECT * FROM caja WHERE id = ?`, [id]);
+    const [rows] = await pool.execute(`SELECT * FROM cajas WHERE id = ?`, [id]);
     const cajas = rows as Caja[];
     return cajas[0] || null;
   }
