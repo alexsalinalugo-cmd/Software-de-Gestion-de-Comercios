@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QRScanner from "../../../components/Escaner.tsx";
 import type { Producto, EditarProducto } from "../../interfaces/Producto.ts";
 
@@ -9,10 +9,11 @@ const EditarComponent = ({
   CategoriasProp,
   ProveedorProp,
   MarcasProp,
+  UbicacionesProp,
 }: EditarProducto) => {
   const [Escaner, setEscaner] = useState<boolean>(false);
   const [QrResultado, setQrResultado] = useState(Producto.codigo_barra || "");
-
+  const [EsnuevaUbicacion, setEsnuevaUbicacion] = useState<boolean>(false);
   const ManejarEdicion = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //Evita que el navegador recargue la página al hacer clic en el botón de enviar (submit) que es algo que hacen los submit".
     const data = new FormData(e.currentTarget); // e target son los eventos que se producten en el formulario,
@@ -32,7 +33,7 @@ const EditarComponent = ({
       stock_minimo: Number(valores.stock_minimo),
       id_categoria: Number(valores.id_categoria),
       id_proveedor: Number(valores.id_proveedor),
-      id_ubicacion: Producto.id_ubicacion,
+      id_ubicacion: Number(valores.id_ubicacion),
     } as Producto;
 
     onActualizar(productoFinal);
@@ -42,6 +43,12 @@ const EditarComponent = ({
     setQrResultado(Qr);
     setEscaner(!Escaner);
   };
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
   return (
     <div>
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 overflow-y-auto grid place-items-center py-10 p-4">
@@ -50,6 +57,11 @@ const EditarComponent = ({
             z-50: Asegura que el formulario esté "al frente" de cualquier otro elemento (Sidebar, Tabla, etc.).
              required obliga a que el usuario complete esos campos antes de enviar el formulario, lo cual es importante para asegurarnos de que tenemos toda la información
               necesaria para crear un nuevo producto.
+              La clase inset-0 es equivalente a escribir estas cuatro propiedades en CSS puro:
+              top: 0px;
+              right: 0px;
+              bottom: 0px;
+              left: 0px;
           */}
         <form
           onSubmit={ManejarEdicion}
@@ -57,7 +69,7 @@ const EditarComponent = ({
         >
           <h1 className="text-2xl text-center font-black text-white">
             {" "}
-            Producto Nuevo
+            Editar Producto
           </h1>
 
           <div className="flex gap-2 w-full ">
@@ -73,7 +85,7 @@ const EditarComponent = ({
                 defaultValue={Producto.nombre}
               />
             </div>
-            <div className="flex flex-col flex-1 min-w-0">
+            <div className="flex flex-col flex-1 min-w-0 ">
               <label className="text-gray-400 text-[15px] font-black">
                 Marca
               </label>
@@ -203,30 +215,62 @@ const EditarComponent = ({
 
           <div className="flex gap-2">
             <div className="flex flex-col flex-1 min-w-0 gap-2 ">
-              <label className="text-gray-400 text-[15px] font-black text-center ">
-                ¿Donde esta?
-              </label>
-              <input
-                type="text"
-                placeholder="Sector ejemplo(Pasillo 'A')"
-                name="ubicacion_sector"
-                className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.sector}
-              />
-              <input
-                type="text"
-                placeholder="Estanteria ejemplo(Estante 3)"
-                name="ubicacion_estanteria"
-                className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.estanteria}
-              />
-              <input
-                type="text"
-                placeholder="Posicion ejemplo(Arribe a ala izquierda)"
-                name="ubicacion_posicion"
-                className="p-2 bg-gray-800/30 rounded text-white"
-                defaultValue={Producto.posicion}
-              />
+              <div className="flex justify-between items-center my-2">
+                <label className="text-gray-400 text-[15px] font-black text-center ">
+                  ¿Donde esta?
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setEsnuevaUbicacion(!EsnuevaUbicacion)}
+                  className="text-[15px] text-blue-400 underline"
+                >
+                  {EsnuevaUbicacion ? "Elegir Ubicacion" : "+ Nueva Ubicacion"}
+                </button>
+              </div>
+              {EsnuevaUbicacion ? (
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="text"
+                    placeholder="Sector ejemplo(Pasillo 'A')"
+                    name="ubicacion_sector"
+                    className="p-2 bg-gray-800/30 rounded"
+                    defaultValue={Producto.sector}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Estanteria ejemplo(Estante 3)"
+                    name="ubicacion_estanteria"
+                    className="p-2 bg-gray-800/30 rounded"
+                    defaultValue={Producto.estanteria}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Posicion ejemplo(Arribe a ala izquierda)"
+                    name="ubicacion_posicion"
+                    className="p-2 bg-gray-800/30 rounded"
+                    defaultValue={Producto.posicion}
+                  />
+                </div>
+              ) : (
+                <select
+                  name="id_ubicacion"
+                  className="p-2 bg-gray-800/30 rounded text-white"
+                  required
+                >
+                  <option value="" className="bg-gray-800 hover:bg-gray-900">
+                    Seleccionar...
+                  </option>
+                  {UbicacionesProp.map((ubi) => (
+                    <option
+                      key={ubi.id}
+                      value={ubi.id}
+                      className="bg-gray-800 hover:bg-gray-900"
+                    >
+                      {ubi.sector} {ubi.estanteria} {ubi.posicion}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
 
@@ -275,7 +319,7 @@ const EditarComponent = ({
                     value={pr.id}
                     className="bg-gray-800 hover:bg-gray-900"
                   >
-                    {pr.nombre}
+                    {pr.razon_social}
                     {pr.id === Producto.id_proveedor ? " (Actual)" : ""}
                   </option>
                 ))}
@@ -321,6 +365,7 @@ const EditarComponent = ({
             <button
               className="bg-amber-500 py-1 px-2 rounded text-black font-bold text-[13px]"
               onClick={onClose}
+              type="button"
             >
               {" "}
               Cerrar

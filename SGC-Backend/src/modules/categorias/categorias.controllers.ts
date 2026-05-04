@@ -1,7 +1,8 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import { CategoriasServices } from "./categorias.services";
 import { ManagerErrors } from "../../shared/errors/AppErrors";
-
+import { getBodyData } from "../../shared/utils/BodyReq";
+import { CategoriaCrear, CategoriasResponse } from "./categorias.types";
 export class CategoriasControllers {
   static async MostrarRelaControllers(
     req: IncomingMessage,
@@ -35,6 +36,39 @@ export class CategoriasControllers {
       const mensaje = error.message || "Error interno del servidor";
       res.statusCode = statuscode;
       res.end(JSON.stringify({ Mensaje: mensaje }));
+    }
+  }
+  static async CategoriasCrearControllers(
+    req: IncomingMessage,
+    res: ServerResponse,
+  ): Promise<void> {
+    try {
+      const DatosParseados = await getBodyData<CategoriaCrear>(req);
+      const data =
+        await CategoriasServices.CrearCategoriasService(DatosParseados);
+      res.writeHead(201);
+      res.end(JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+      res.writeHead(500);
+      res.end(JSON.stringify({ Mensaje: "Error interno del servidor" }));
+    }
+  }
+  static async CategoriasEditarControllers(
+    req: IncomingMessage,
+    res: ServerResponse,
+  ): Promise<void> {
+    try {
+      const DatosParseados = await getBodyData<CategoriasResponse>(req);
+
+      const data =
+        await CategoriasServices.CategoriasEditarService(DatosParseados);
+      res.writeHead(200);
+      res.end(JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+      res.writeHead(500);
+      res.end(JSON.stringify({ Mensaje: "Error interno del servidor" }));
     }
   }
 }

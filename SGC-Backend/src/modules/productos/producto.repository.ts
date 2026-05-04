@@ -9,13 +9,14 @@ export class ProductoRepository {
     const [rows] = await pool.query(`
       SELECT p.*,mr.id AS id_marca ,mr.nombre AS marca_nombre,
       c.id AS id_categoria,c.nombre AS categoria_nombre,
-      pr.id AS id_proveedor,pr.nombre AS proveedor_nombre,
+      pr.id AS id_proveedor,pr.razon_social AS proveedor_razon_social,
       ubi.sector , ubi.estanteria, ubi.posicion
       FROM productos p 
       LEFT JOIN categorias c ON p.id_categoria = c.id
       LEFT JOIN proveedores pr ON p.id_proveedor = pr.id
       LEFT JOIN ubicaciones ubi ON p.id_ubicacion = ubi.id
       LEFT JOIN marcas mr ON p.id_marca = mr.id 
+     
       WHERE p.activo = 1
       
       `);
@@ -89,7 +90,7 @@ export class ProductoRepository {
       SELECT p.*,
       mr.id AS id_marca ,mr.nombre AS marca_nombre,
       c.nombre AS categoria_nombre,
-      pr.nombre AS proveedor_nombre, 
+      pr.razon_social AS proveedor_razon_social, 
       ubi.sector , ubi.estanteria, ubi.posicion
       FROM productos p 
       LEFT JOIN categorias c ON p.id_categoria = c.id

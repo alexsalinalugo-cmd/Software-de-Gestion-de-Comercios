@@ -138,7 +138,12 @@ export default function GestionProductos() {
   return (
     <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
       <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white flex flex-wrap items-center justify-between gap-4">
-        <div className="font-black text-4xl">GESTION DE PRODUCTOS</div>
+        <div className="flex flex-col">
+          <span className="font-black text-4xl">GESTION DE PRODUCTOS</span>
+          <span className="text-gray-500 font-bold text-[13px]">
+            Catalago Industrial · {Productos.length} - Productos Registrados
+          </span>
+        </div>
         <div className="w-full md:w-auto">
           <AgregarProductosComponent
             onAgregar={AgregarPro}
@@ -159,6 +164,9 @@ export default function GestionProductos() {
             datos={Productos}
             onEditar={FuncionEditar}
             onEliminar={EliminarPro}
+            CategoriasProp={Categorias}
+            ProveedorProp={Proveedores}
+            MarcasProp={Marcas}
           />
         )}
       </div>

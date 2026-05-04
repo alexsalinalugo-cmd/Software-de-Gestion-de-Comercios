@@ -16,4 +16,10 @@ export const ProveedoresRoutes = async (
   if (ruta === "/proveedoresCompletas" && metodo === "GET") {
     return ProveedoresController.ProveedoresCompletoControllers(req, res);
   }
+  if (ruta === "/crearProveedores" && metodo === "POST") {
+    return ProveedoresController.ProveedoresCrearControllers(req, res);
+  }
+  if (ruta === "/editarProveedores" && metodo === "PUT") {
+    return ProveedoresController.ProveedoresEditarControllers(req, res);
+  }
 };

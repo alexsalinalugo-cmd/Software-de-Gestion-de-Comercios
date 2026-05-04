@@ -1,8 +1,9 @@
 export interface Proveedores {
   id: number;
   cuit: number;
-  nombre: string;
-  medio_contacto: string;
+  razon_social: string;
+  telefono: number;
+  email: string;
   nombre_contacto: string;
   dia_visita: string;
 }
@@ -11,8 +12,6 @@ export interface Productos {
   nombre: string;
   precio_costo: number;
   stock_total: number;
-  stock_minimo: number;
-  unidad_medida: string;
 }
 
 export interface ProveedoresCompletos extends Proveedores {

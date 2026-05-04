@@ -16,4 +16,10 @@ export const CategoriasRoutes = async (
   if (ruta === "/categoriasNormales" && metodo === "GET") {
     return await CategoriasControllers.MostrarCategoriasControllers(req, res);
   }
+  if (ruta === "/categoriasCrear" && metodo === "POST") {
+    return await CategoriasControllers.CategoriasCrearControllers(req, res);
+  }
+  if (ruta === "/editar" && metodo === "PUT") {
+    return await CategoriasControllers.CategoriasEditarControllers(req, res);
+  }
 };

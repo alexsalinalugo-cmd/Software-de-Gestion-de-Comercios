@@ -48,24 +48,24 @@ export class ProductoService {
         if (idExistente) {
           IdCategoria = idExistente;
         } else {
-          IdCategoria = await CategoriasRepository.CrearCategoria(
+          IdCategoria = await CategoriasRepository.CrearCategoriaRapido(
             conexion,
             NombreDCategoria,
           );
         }
       }
-      if (Datos.proveedor_nombre) {
-        const NombreProveedor = NormalizarTexto(Datos.proveedor_nombre);
-        const idExistente = await ProveedoresRepository.BuscarProveedor(
+      if (Datos.proveedor_razon_social) {
+        const Razon_Proveedor = NormalizarTexto(Datos.proveedor_razon_social);
+        const idExistente = await ProveedoresRepository.BuscarProveedorxNombre(
           conexion,
-          NombreProveedor,
+          Razon_Proveedor,
         );
         if (idExistente) {
           IdProveedor = idExistente;
         } else {
-          IdProveedor = await ProveedoresRepository.CrearProveedores(
+          IdProveedor = await ProveedoresRepository.CrearProveedoresRapido(
             conexion,
-            NombreProveedor,
+            Razon_Proveedor,
           );
         }
       }

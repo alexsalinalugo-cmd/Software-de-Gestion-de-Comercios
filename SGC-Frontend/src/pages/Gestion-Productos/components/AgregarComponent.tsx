@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { AgregarProducto } from "../../interfaces/Producto";
 import type { Producto } from "../../interfaces/Producto";
 import QRScanner from "../../../components/Escaner.tsx";
@@ -45,7 +45,21 @@ export default function AgregarComponent({
     setQrResultado(Qr);
     setEscaner(!Escaner);
   };
-  console.log("Ubicaciones:", UbicacionesProp);
+  useEffect(() => {
+    if (Formulario) {
+      // Bloquea el scroll y evita el salto visual de la barra lateral
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = "var(--removed-body-scroll-bar-size)";
+    } else {
+      document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+    }
+
+    // Limpieza al desmontar el componente
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [Formulario]);
   return (
     <div>
       {Formulario ? (
@@ -64,7 +78,7 @@ export default function AgregarComponent({
 
             <div className="flex gap-2 w-full ">
               <div className="flex flex-col flex-1 min-w-0">
-                <label className="text-gray-400 text-[15px] font-black  my-2">
+                <label className="text-gray-400 text-[15px] font-black  ">
                   Nombre
                 </label>
                 <input
@@ -76,14 +90,14 @@ export default function AgregarComponent({
                 />
               </div>
               <div className="flex flex-col flex-1 min-w-0">
-                <div className="flex justify-between items-center my-2">
+                <div className="flex justify-between items-center ">
                   <label className="text-gray-400 text-[15px] font-black">
                     Marca
                   </label>
                   <button
                     type="button"
                     onClick={() => setEsnuevoMarca(!EsNuevoMarca)}
-                    className="text-[15px] text-blue-400 underline"
+                    className=" lg:text-[15px] text-[12px]  text-blue-400 underline"
                   >
                     {EsNuevoMarca ? "Elegir Marca" : "+ Nueva Marca"}
                   </button>
@@ -190,6 +204,65 @@ export default function AgregarComponent({
                 </select>
               </div>
             </div>
+            {/* <div className="flex gap-2 justify-center items-center">
+              <div className="flex flex-col  flex-1  min-w-0">
+                <label
+                  htmlFor="Opciones"
+                  className="text-gray-400 text-[15px] font-black"
+                >
+                  Elige Atributos
+                </label>
+
+                <select
+                  id="Opciones"
+                  name="nombre_atributo"
+                  className="bg-gray-800/30 rounded p-2 w-full"
+                >
+                  <option
+                    value="color"
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    Color
+                  </option>
+                  <option
+                    value="potencia"
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    Potencia
+                  </option>
+                  <option
+                    value="grosor"
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    Grosor
+                  </option>
+                  <option
+                    value="angulo"
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    Angulo
+                  </option>
+                  <option
+                    value="pulgada"
+                    className="bg-gray-800 hover:bg-gray-900"
+                  >
+                    Pulgada
+                  </option>
+                </select>
+              </div>
+              <div className="flex flex-col flex-1 min-w-0 ">
+                <label className="text-gray-400 text-[15px] font-black ">
+                  Valor
+                </label>
+                <input
+                  type="text"
+                  placeholder="Color=Rojo"
+                  name="valor_atributo"
+                  className="p-2 bg-gray-800/30 rounded"
+                  required
+                />
+              </div>
+            </div> */}
             <div className="flex gap-2 justify-center items-center">
               <div className="flex flex-col flex-1 min-w-0 ">
                 <label className="text-gray-400 text-[15px] font-black ">
@@ -342,7 +415,7 @@ export default function AgregarComponent({
                   <input
                     type="text"
                     placeholder="Eje(Distribuidora 'Sol')"
-                    name="proveedor_nombre"
+                    name="proveedor_razon_social"
                     className="p-2 bg-gray-800/30 rounded"
                   />
                 ) : (
@@ -360,7 +433,7 @@ export default function AgregarComponent({
                         value={pr.id}
                         className="bg-gray-800 hover:bg-gray-900"
                       >
-                        {pr.nombre}
+                        {pr.razon_social}
                       </option>
                     ))}
                   </select>
@@ -417,6 +490,7 @@ export default function AgregarComponent({
         <BotonAgregar // le pasamos el texto y la funcion para mostrar el formulario al hacer clic en el boton
           texto="Agregar Producto"
           onclick={() => setFormulario(!Formulario)}
+          bg="bg-amber-400"
         />
       )}
     </div>

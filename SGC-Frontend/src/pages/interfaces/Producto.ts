@@ -5,7 +5,7 @@ import type { UbicacionesInterface } from "./ubicaciones";
 interface Proveedores {
   id_proveedor: number;
   proveedor_cuit: string;
-  proveedor_nombre: string;
+  proveedor_razon_social: string;
   proveedor_MedioContacto: string;
   proveedor_NombreContacto: string;
   proveedor_DiaVisita: string;
@@ -32,12 +32,17 @@ export interface Producto extends Proveedores, Ubicacion, Marca {
   codigo_barra: string;
   id_categoria: number;
   categoria_nombre: string;
+  nombre_atributo: string;
+  valor_atributo: string;
 }
 
 export interface TablaProducto {
   datos: Producto[];
   onEditar: (producto: Producto) => void;
   onEliminar: (id: number) => void;
+  CategoriasProp: categoriasInterface[];
+  ProveedorProp: ProveedoresInterface[];
+  MarcasProp: MarcasInterface[];
 }
 export interface AgregarProducto {
   onAgregar: (producto: Producto) => void;

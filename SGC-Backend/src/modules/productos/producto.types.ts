@@ -13,10 +13,12 @@ export interface Producto {
   id_proveedor: number | null;
   id_categoria: number | null;
   categoria_nombre: string;
-  proveedor_nombre: string;
+  proveedor_razon_social: string;
   ubicacion_sector: string;
   ubicacion_estanteria: string;
   ubicacion_posicion: string;
+  nombre_atributo: string;
+  valor_atributo: string;
 }
 
 export interface CrearProducto {
@@ -33,10 +35,12 @@ export interface CrearProducto {
   id_proveedor?: number | null;
   id_categoria?: number;
   categoria_nombre: string;
-  proveedor_nombre: string;
+  proveedor_razon_social: string;
   ubicacion_sector: string;
   ubicacion_estanteria: string;
   ubicacion_posicion: string;
+  nombre_atributo: string;
+  valor_atributo: string;
 }
 
 /* 

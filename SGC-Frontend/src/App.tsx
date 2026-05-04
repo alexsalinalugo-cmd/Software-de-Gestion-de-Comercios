@@ -8,6 +8,8 @@ import ReporteVentas from "../src/pages/Gestion-Reportes/components/ReporteVenta
 import ReporteProductos from "../src/pages/Gestion-Reportes/components/ReporteProductos";
 import ReporteCategorias from "../src/pages/Gestion-Reportes/components/ReporteCategorias";
 import ReporteProveedores from "../src/pages/Gestion-Reportes/components/ReporteProveedores";
+import Proveedores from "./pages/Gestion-Proveedores/Proveedores";
+import Categoria from "./pages/Gestion-Categoria/Categoria";
 function App() {
   return (
     <div>
@@ -30,6 +32,8 @@ function App() {
           path="/Reportes/Proveedores"
           element={<ReporteProveedores />}
         ></Route>
+        <Route path="/Proveedores" element={<Proveedores />}></Route>
+        <Route path="/Categorias" element={<Categoria />}></Route>
       </Routes>
     </div>
   );
