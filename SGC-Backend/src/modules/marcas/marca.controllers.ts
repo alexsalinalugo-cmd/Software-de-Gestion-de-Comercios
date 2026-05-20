@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { MarcasServices } from "./marca.services";
+import { parsearBody } from "../../shared/utils/parsearBody";
 
 export class MarcaControllers {
   static async MostrarMarcasControllers(
@@ -21,7 +22,8 @@ export class MarcaControllers {
     res: ServerResponse,
   ): Promise<void> {
     try {
-      const data = await MarcasServices.CrearMarcasService();
+      const body = await parsearBody(req);
+      const data = await MarcasServices.CrearMarcasService(body.nombre);
       res.writeHead(201);
       res.end(JSON.stringify(data));
     } catch (error) {

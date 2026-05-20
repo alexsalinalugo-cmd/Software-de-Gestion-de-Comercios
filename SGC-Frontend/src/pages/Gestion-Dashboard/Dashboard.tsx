@@ -81,33 +81,34 @@ export default function Dashboard() {
   }, [data]);
 
   return (
-    <section className="bg-[#2a2d3a] w-full min-h-screen">
-      <div className="md:pl-56 p-4 md:p-8 min-h-screen">
-        <div className="bg-[#f7f9fc] text-[#1e2a3a] rounded-2xl shadow-2xl min-h-[calc(100vh-4rem)] p-4 md:p-6">
-          <div className="flex justify-between items-center mb-5 gap-4 flex-wrap">
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container min-h-[calc(100vh-4rem)] text-[#1e2a3a]">
+          <div className="sgc-page-header">
             <div>
-              <p className="text-gray-400 text-xs font-black uppercase">
+              <p className="sgc-kicker">
                 Gestión comercial
               </p>
-              <h1 className="text-2xl md:text-3xl font-black text-[#1d2a3d]">
+              <h1 className="sgc-title">
                 Dashboard
               </h1>
+              <p className="sgc-subtitle">Ventas, stock y operación diaria.</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="hidden md:block bg-white border border-[#e6edf7] rounded-xl px-4 py-2 min-w-64">
+              <div className="hidden min-w-64 rounded-lg border border-orange-100 bg-orange-50/70 px-4 py-2 md:block">
                 <p className="text-gray-400 text-xs font-bold">Resumen</p>
-                <p className="text-[#2563eb] text-sm font-black">
+                <p className="text-orange-700 text-sm font-black">
                   Ventas, stock y operación
                 </p>
               </div>
-              <span className="bg-[#e9f8ef] text-[#16a34a] px-4 py-2 rounded-xl text-xs font-black">
+              <span className="bg-[#e9f8ef] text-[#15803d] px-4 py-2 rounded-lg text-xs font-black">
                 ACTIVO
               </span>
             </div>
           </div>
 
           {cargando ? (
-            <div className="bg-white border border-[#e6edf7] rounded-2xl p-8 text-gray-400 font-bold">
+            <div className="bg-white border border-[#dfe7f1] rounded-lg p-8 text-gray-400 font-bold shadow-sm">
               Cargando dashboard...
             </div>
           ) : data && metricas ? (
@@ -118,14 +119,14 @@ export default function Dashboard() {
                   value={money(data.ventasHoy.metricas.total_vendido)}
                   subtitle={`${data.ventasHoy.metricas.cantidad_ventas} ventas`}
                   percent={metricas.avanceDia}
-                  color="#2563eb"
+                  color="#f97316"
                 />
                 <CompactMetric
                   title="Ventas semana"
                   value={money(data.ventasSemana.metricas.total_vendido)}
                   subtitle={`Ticket ${money(data.ventasSemana.metricas.ticket_promedio)}`}
                   percent={72}
-                  color="#0ea5e9"
+                  color="#fb923c"
                 />
                 <CompactMetric
                   title="Inventario"
@@ -139,12 +140,12 @@ export default function Dashboard() {
                   value={`${metricas.saludStock}%`}
                   subtitle={`${data.productos.metricas.productos_criticos} críticos`}
                   percent={metricas.saludStock}
-                  color="#7c3aed"
+                  color="#c2410c"
                 />
               </div>
 
-              <div className="xl:col-span-3 bg-white border border-[#e6edf7] rounded-2xl p-5">
-                <PanelTitle title="Daily chart" />
+              <div className="xl:col-span-3 bg-white border border-[#dfe7f1] rounded-lg p-5 shadow-sm">
+                <PanelTitle title="Indicadores clave" />
                 <VerticalBars
                   items={[
                     { label: "Hoy", value: metricas.ventasHoy },
@@ -159,26 +160,26 @@ export default function Dashboard() {
                 />
               </div>
 
-              <div className="xl:col-span-9 bg-white border border-[#e6edf7] rounded-2xl p-5">
+              <div className="xl:col-span-9 bg-white border border-[#dfe7f1] rounded-lg p-5 shadow-sm">
                 <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
                   <div>
                     <p className="text-gray-400 text-xs font-black uppercase">
-                      Analysis
+                      Analisis
                     </p>
                     <h2 className="text-[#1d2a3d] font-black text-lg">
                       Evolución de ventas
                     </h2>
                   </div>
                   <div className="flex items-center gap-2 text-xs font-bold">
-                    <span className="w-3 h-3 rounded-full bg-[#2563eb]" />
+                    <span className="w-3 h-3 rounded-full bg-orange-500" />
                     <span className="text-gray-500">Últimos movimientos</span>
                   </div>
                 </div>
                 <LineChart values={tendenciaVentas} />
               </div>
 
-              <div className="xl:col-span-3 bg-white border border-[#e6edf7] rounded-2xl p-5">
-                <PanelTitle title="Top flow" />
+              <div className="xl:col-span-3 bg-white border border-[#dfe7f1] rounded-lg p-5 shadow-sm">
+                <PanelTitle title="Salud operativa" />
                 <RadarCard
                   stock={metricas.saludStock}
                   ventas={metricas.avanceDia}
@@ -186,19 +187,19 @@ export default function Dashboard() {
                 />
               </div>
 
-              <div className="xl:col-span-4 bg-white border border-[#e6edf7] rounded-2xl p-5">
+              <div className="xl:col-span-4 bg-white border border-[#dfe7f1] rounded-lg p-5 shadow-sm">
                 <PanelTitle title="Productos más vendidos" />
                 <HorizontalBars
                   items={data.productos.mas_vendidos.slice(0, 6).map((producto) => ({
                     label: producto.nombre,
                     value: Number(producto.cantidad_vendida),
                   }))}
-                  color="bg-[#2563eb]"
+                  color="bg-orange-500"
                   emptyText="Sin ventas"
                 />
               </div>
 
-              <div className="xl:col-span-5 bg-white border border-[#e6edf7] rounded-2xl p-5">
+              <div className="xl:col-span-5 bg-white border border-[#dfe7f1] rounded-lg p-5 shadow-sm">
                 <PanelTitle title="Ventas por categoría" />
                 <VerticalBars
                   items={data.categorias.ventas_por_categoria
@@ -207,16 +208,16 @@ export default function Dashboard() {
                       label: categoria.nombre,
                       value: Number(categoria.total_vendido),
                     }))}
-                  color="bg-[#3b82f6]"
+                  color="bg-orange-400"
                 />
               </div>
 
-              <div className="xl:col-span-3 bg-white border border-[#e6edf7] rounded-2xl p-5">
-                <PanelTitle title="Activity" />
+              <div className="xl:col-span-3 bg-white border border-[#dfe7f1] rounded-lg p-5 shadow-sm">
+                <PanelTitle title="Actividad" />
                 <ActivityRow
                   label="Categorías"
                   value={data.categorias.metricas.total_categorias}
-                  color="bg-[#2563eb]"
+                  color="bg-orange-500"
                 />
                 <ActivityRow
                   label="Proveedores"
@@ -232,7 +233,7 @@ export default function Dashboard() {
               </div>
             </div>
           ) : (
-            <div className="bg-white border border-[#e6edf7] rounded-2xl p-8 text-gray-400 font-bold">
+            <div className="bg-white border border-[#dfe7f1] rounded-lg p-8 text-gray-400 font-bold shadow-sm">
               No se pudo cargar el dashboard
             </div>
           )}
@@ -246,7 +247,7 @@ function PanelTitle({ title }: { title: string }) {
   return (
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-[#1d2a3d] font-black text-sm">{title}</h2>
-      <span className="bg-[#eaf2ff] text-[#2563eb] px-2 py-1 rounded-md text-[10px] font-black">
+      <span className="rounded-md bg-orange-50 px-2 py-1 text-[10px] font-black text-orange-700">
         LIVE
       </span>
     </div>
@@ -267,10 +268,10 @@ function CompactMetric({
   color: string;
 }) {
   return (
-    <div className="bg-white border border-[#e6edf7] rounded-2xl p-4 min-h-36">
+    <div className="bg-white border border-[#dfe7f1] rounded-lg p-4 min-h-36 shadow-sm">
       <div className="flex justify-between items-start gap-3">
         <div className="min-w-0">
-          <p className="text-gray-400 text-xs font-black uppercase">Analysis</p>
+          <p className="text-gray-400 text-xs font-black uppercase">Analisis</p>
           <p className="text-[#1d2a3d] font-black text-xl mt-1 truncate">
             {value}
           </p>
@@ -329,8 +330,8 @@ function LineChart({ values }: { values: number[] }) {
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-60">
         <defs>
           <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#93c5fd" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#eff6ff" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#fdba74" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#fff7ed" stopOpacity="0.08" />
           </linearGradient>
         </defs>
         {[0, 1, 2, 3].map((line) => (
@@ -348,7 +349,7 @@ function LineChart({ values }: { values: number[] }) {
         <polyline
           points={coords}
           fill="none"
-          stroke="#2563eb"
+          stroke="#f97316"
           strokeWidth="5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -362,7 +363,7 @@ function LineChart({ values }: { values: number[] }) {
               cy={y}
               r="6"
               fill="#ffffff"
-              stroke="#2563eb"
+              stroke="#f97316"
               strokeWidth="4"
             />
           );

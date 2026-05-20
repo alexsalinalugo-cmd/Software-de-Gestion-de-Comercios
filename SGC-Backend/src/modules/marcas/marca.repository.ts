@@ -24,7 +24,7 @@ export class MarcasRepository {
     conexion: PoolConnection,
     nombre: string,
   ): Promise<number> {
-    const [data] = await pool.query<ResultSetHeader>(
+    const [data] = await conexion.query<ResultSetHeader>(
       `INSERT INTO marcas (nombre) VALUES (?)`,
       [nombre],
     );

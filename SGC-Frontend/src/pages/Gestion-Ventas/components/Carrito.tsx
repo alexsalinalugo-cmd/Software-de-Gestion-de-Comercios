@@ -55,15 +55,15 @@ export default function Carrito({
     <>
       {/* Modal pago en efectivo */}
       {mostrarPago && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#1e2130] rounded-2xl p-8 w-full max-w-md shadow-2xl">
-            <h2 className="text-white font-black text-2xl mb-6">
+        <div className="sgc-modal-backdrop">
+          <div className="sgc-modal-card w-full max-w-md p-6 md:p-8">
+            <h2 className="mb-6 text-2xl font-black text-slate-900">
               COBRO EN EFECTIVO
             </h2>
 
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-400">Total a cobrar</span>
-              <span className="text-yellow-400 font-black text-xl">
+              <span className="text-orange-700 font-black text-xl">
                 {total.toLocaleString("es-AR", {
                   style: "currency",
                   currency: "ARS",
@@ -91,7 +91,7 @@ export default function Carrito({
               value={montoPagado}
               onChange={(e) => setMontoPagado(e.target.value)}
               placeholder="Ej: 5000"
-              className="w-full p-3 rounded-lg bg-[#2a2d3a] text-white border border-gray-600 focus:outline-none focus:border-yellow-400 mb-4"
+              className="mb-4 w-full"
               autoFocus
             />
 
@@ -121,14 +121,14 @@ export default function Carrito({
                   setMostrarPago(false);
                   setMontoPagado("");
                 }}
-                className="flex-1 bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition"
+                className="sgc-button-secondary flex-1"
               >
                 Cancelar
               </button>
               <button
                 onClick={handlePagoEfectivo}
                 disabled={!montoPagado || Number(montoPagado) < total}
-                className="flex-1 bg-yellow-400 text-black font-bold py-3 rounded-lg hover:bg-yellow-300 transition disabled:opacity-50"
+                className="sgc-button-primary flex-1 disabled:opacity-50"
               >
                 Confirmar
               </button>
@@ -138,11 +138,11 @@ export default function Carrito({
       )}
 
       {/* Carrito */}
-      <div className="bg-[#1e2130] rounded-xl p-6 w-96 flex flex-col gap-4 sticky top-6 h-fit">
-        <h2 className="text-white font-black text-2xl">CARRITO</h2>
+      <div className="sgc-panel flex h-fit w-full flex-col gap-4 p-6 xl:sticky xl:top-6 xl:w-96">
+        <h2 className="text-2xl font-black text-slate-900">Carrito</h2>
 
         {/* Ganancia y cambio */}
-        <div className="flex flex-col gap-2 bg-[#2a2d3a] rounded-lg p-3">
+        <div className="flex flex-col gap-2 rounded-lg border border-orange-100 bg-orange-50/60 p-3">
           <div className="flex justify-between items-center">
             <span className="text-gray-400 text-sm">Ganancia de caja</span>
             <span className="text-green-400 font-black">
@@ -154,7 +154,7 @@ export default function Carrito({
           </div>
           <div className="flex justify-between items-center">
             <span className="text-gray-400 text-sm">Cambio disponible</span>
-            <span className="text-blue-400 font-black">
+            <span className="text-orange-700 font-black">
               {cambioDisponible.toLocaleString("es-AR", {
                 style: "currency",
                 currency: "ARS",
@@ -173,7 +173,7 @@ export default function Carrito({
                 className="flex justify-between items-center border-b border-gray-700 pb-3"
               >
                 <div className="flex flex-col flex-1">
-                  <p className="text-white text-sm font-bold">{item.nombre}</p>
+                  <p className="text-sm font-bold text-slate-900">{item.nombre}</p>
                   <p className="text-gray-400 text-xs">
                     {item.cantidad} x{" "}
                     {Number(item.precio_unitario).toLocaleString("es-AR", {
@@ -183,7 +183,7 @@ export default function Carrito({
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <p className="text-yellow-400 font-bold text-sm">
+                  <p className="text-sm font-bold text-orange-700">
                     {(item.cantidad * item.precio_unitario).toLocaleString(
                       "es-AR",
                       { style: "currency", currency: "ARS" },
@@ -204,7 +204,7 @@ export default function Carrito({
         <div className="border-t border-gray-700 pt-4">
           <div className="flex justify-between items-center">
             <span className="text-gray-400 font-bold">TOTAL</span>
-            <span className="text-white font-black text-2xl">
+            <span className="text-slate-900 font-black text-2xl">
               {total.toLocaleString("es-AR", {
                 style: "currency",
                 currency: "ARS",
@@ -218,7 +218,7 @@ export default function Carrito({
           <select
             value={metodoPago}
             onChange={(e) => setMetodoPago(e.target.value as MetodoPago)}
-            className="bg-[#2a2d3a] text-white p-2 rounded-lg border border-gray-600"
+            className="w-full"
           >
             <option value="Efectivo">Efectivo</option>
             <option value="Tarjeta Debito">Tarjeta Débito</option>
@@ -231,7 +231,7 @@ export default function Carrito({
         <button
           onClick={handleConfirmar}
           disabled={carrito.length === 0}
-          className="bg-yellow-400 text-black font-bold py-3 rounded-lg hover:bg-yellow-300 transition disabled:opacity-50 text-lg"
+          className="sgc-button-primary text-lg disabled:opacity-50"
         >
           Confirmar Venta
         </button>

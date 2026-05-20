@@ -8,8 +8,8 @@ const TablaProveedores = ({
   // pero aquí asumimos que se renderiza cuando le das a "Ver más"
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-4xl max-h-[80vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
+    <div className="sgc-modal-backdrop">
+      <div className="sgc-modal-card flex w-full max-w-4xl flex-col overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0">
           <div>
             <h2 className="text-xl font-black text-slate-800">
@@ -64,14 +64,14 @@ const TablaProveedores = ({
               {ProductosRelacionados.map((prod) => (
                 <tr
                   key={prod.id_producto}
-                  className="bg-white shadow-sm group hover:ring-2 hover:ring-blue-400 transition-all"
+                  className="bg-white shadow-sm group hover:ring-2 hover:ring-orange-300 transition-all"
                 >
                   <td className="px-4 py-4 rounded-l-xl border-y border-l border-gray-50">
                     <div className="flex flex-col">
                       <span className="font-bold text-slate-700">
                         {prod.nombre}
                       </span>
-                      <span className="text-[10px] text-blue-500 font-mono">
+                      <span className="text-[10px] text-orange-600 font-mono">
                         #{prod.id_producto}
                       </span>
                     </div>
@@ -84,7 +84,7 @@ const TablaProveedores = ({
                       className={`inline-block w-16 py-1 rounded-lg font-black text-xs ${
                         prod.stock_total < 5
                           ? "bg-red-100 text-red-600"
-                          : "bg-blue-100 text-blue-600"
+                          : "bg-orange-100 text-orange-700"
                       }`}
                     >
                       {prod.stock_total}
@@ -106,7 +106,7 @@ const TablaProveedores = ({
         </div>
 
         <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
-          <button className="px-6 py-2 bg-slate-800 text-white rounded-xl font-bold text-sm hover:bg-slate-700 transition-colors shadow-lg shadow-slate-200">
+          <button className="sgc-button-primary">
             Exportar a PDF
           </button>
         </div>

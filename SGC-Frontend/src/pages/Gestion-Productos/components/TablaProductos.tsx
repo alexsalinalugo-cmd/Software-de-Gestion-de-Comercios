@@ -1,6 +1,6 @@
 import type { TablaProducto, Producto } from "../../interfaces/Producto";
 import Detalles from "./DetallesComponent";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const TablaProductos = ({
   datos,
@@ -42,32 +42,32 @@ const TablaProductos = ({
   let Resultado = datosFiltrados.length;
 
   return (
-    <div className="ml-50 p-5  overflow-x-auto ">
-      <div className="mb-4 flex justify-between items-center bg-gray-800/30 p-4 border border-gray-700 rounded-lg capitalize w-full min-w-250 ">
-        <div className="w-full max-w-lg flex gap-2 ">
+    <div>
+      <div className="sgc-filterbar capitalize">
+        <div className="flex w-full max-w-xl gap-2">
           <input
             type="text"
             placeholder=" Buscar por nombre, marca, categoría..."
-            className="p-1  bg-gray-700/50 text-white rounded-lg w-full max-w-lg    border border-gray-700 focus:border-blue-500 outline-none"
+            className="w-full"
             value={Buscador}
             onChange={(e) => setBuscador(e.target.value)}
           />
           {Buscador && (
             <button
               onClick={() => setBuscador("")}
-              className="text-white p-1 bg-gray-800 rounded-xs border border-blue-500 text-xs "
+              className="sgc-button-secondary min-h-0 px-3 py-2 text-xs"
             >
               Limpiar
             </button>
           )}
         </div>
 
-        <div className="flex gap-2 items-center justify-center">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <select
-            className={`p-2 text-xs rounded border transition-all outline-none capitalize ${
+            className={`text-xs capitalize ${
               Categoria !== ""
-                ? "border-blue-500 bg-gray-800 text-white"
-                : "border-gray-700 bg-gray-800 text-white"
+                ? "border-orange-500 bg-orange-50 text-orange-800"
+                : ""
             }`}
             value={Categoria}
             onChange={(e) => setCategoria(e.target.value)}
@@ -80,10 +80,10 @@ const TablaProductos = ({
             ))}
           </select>
           <select
-            className={`p-2 text-xs rounded border transition-all outline-none capitalize ${
+            className={`text-xs capitalize ${
               Marca !== ""
-                ? "border-blue-500 bg-gray-800 text-white"
-                : "border-gray-700 bg-gray-800 text-white"
+                ? "border-orange-500 bg-orange-50 text-orange-800"
+                : ""
             }`}
             value={Marca}
             onChange={(e) => setMarca(e.target.value)}
@@ -96,10 +96,10 @@ const TablaProductos = ({
             ))}
           </select>
           <select
-            className={`p-2 text-xs rounded border transition-all outline-none capitalize ${
+            className={`text-xs capitalize ${
               Proveedor !== ""
-                ? "border-blue-500 bg-gray-800 text-white"
-                : "border-gray-700 bg-gray-800 text-white"
+                ? "border-orange-500 bg-orange-50 text-orange-800"
+                : ""
             }`}
             value={Proveedor}
             onChange={(e) => setProveedor(e.target.value)}
@@ -112,10 +112,10 @@ const TablaProductos = ({
             ))}
           </select>
           <button
-            className={`p-2 text-xs rounded border transition-all outline-none capitalize ${
+            className={`min-h-10 rounded-md border px-3 text-xs font-extrabold transition capitalize ${
               stock !== false
-                ? "border-blue-500 bg-gray-800 text-white"
-                : "border-gray-700 bg-gray-800 text-white"
+                ? "border-orange-500 bg-orange-50 text-orange-800"
+                : "border-slate-200 bg-white text-slate-600 hover:bg-orange-50 hover:text-orange-700"
             }`}
             type="button"
             onClick={() => setStock(!stock)}
@@ -128,9 +128,10 @@ const TablaProductos = ({
         </div>
       </div>
       {/* Espacio para el sidebar */}
-      <table className="w-full text-white border-collapse  bg-gray-900/20 rounded-xl min-w-250 ">
+      <div className="sgc-table-wrap">
+      <table className="sgc-table">
         <thead>
-          <tr className="bg-[#1a1c23] text-left text-[17px] font-black text-gray-400">
+          <tr>
             <th className="p-3 w-50">Producto</th>
             <th className="p-3 w-50">Atributo</th>
             <th className="p-3">Precio-Costo</th>
@@ -138,7 +139,7 @@ const TablaProductos = ({
             <th className="p-3">Unidad-Medida</th>
             <th className="p-3">Stock</th>
             <th className="p-3">Categoría</th>
-            <th className="p-3 flex flex-col">
+            <th className="p-3">
               <span>Estado</span>
               <span>Stock</span>{" "}
             </th>
@@ -146,7 +147,7 @@ const TablaProductos = ({
             <th className="p-3">Acciones</th>
           </tr>
         </thead>
-        <tbody className="text-[15px] ">
+        <tbody className="text-[15px]">
           {datosFiltrados.map((producto) => {
             const stockActual = Number(producto.stock_total);
             const stockMin = Number(producto.stock_minimo);
@@ -154,7 +155,7 @@ const TablaProductos = ({
             return (
               <tr
                 key={producto.id}
-                className="border-b border-gray-700 hover:bg-gray-800/50"
+                className="border-b border-slate-100"
               >
                 <td className="p-3 font-bold capitalize flex flex-col">
                   <span> {producto.nombre}</span>
@@ -177,7 +178,7 @@ const TablaProductos = ({
                 <td className="p-3 font-bold">{producto.unidad_medida}</td>
                 <td className="p-3">
                   <span
-                    className={`px-2 py-1  ${EstadoStock ? " text-red-400" : " text-green-300"}`}
+                    className={`px-2 py-1 font-black ${EstadoStock ? "text-red-600" : "text-green-700"}`}
                   >
                     {Number(producto.stock_total).toLocaleString("es-AR", {
                       maximumFractionDigits: 0,
@@ -185,14 +186,14 @@ const TablaProductos = ({
                   </span>
                 </td>
                 <td className="p-3">
-                  <span className="bg-gray-700/60 text-gray-200 px-2 py-1 rounded text-xs capitalize">
+                  <span className="sgc-pill capitalize">
                     {producto.categoria_nombre}
                   </span>
                 </td>
                 <td className="p-3">
                   {" "}
                   <span
-                    className={`px-2 py-1 rounded text-xs ${EstadoStock ? "bg-red-400/20 text-red-400" : "bg-green-300/20 text-green-300"}`}
+                    className={`rounded px-2 py-1 text-xs font-black ${EstadoStock ? "bg-red-50 text-red-600" : "bg-green-50 text-green-700"}`}
                   >
                     {EstadoStock ? "Crítico" : "Normal"}
                   </span>
@@ -203,13 +204,13 @@ const TablaProductos = ({
                 <td className="p-3 flex gap-2">
                   <div className="flex flex-col ">
                     <button
-                      className="bg-blue-500/70 text-white/80 px-2 py-1 rounded text-xs mb-1"
+                      className="sgc-button-secondary min-h-0 px-2 py-1 text-xs mb-1"
                       onClick={() => onEditar(producto)}
                     >
                       Editar
                     </button>
                     <button
-                      className="bg-yellow-300/10 text-yellow-300/70 px-2 py-1 rounded text-xs"
+                      className="sgc-button-ghost min-h-0 px-2 py-1 text-xs"
                       onClick={() => setProductoSeleccionado(producto)}
                     >
                       + Detalles
@@ -217,7 +218,7 @@ const TablaProductos = ({
                   </div>
 
                   <button
-                    className="text-red-700  "
+                    className="sgc-button-danger min-h-0 px-2 py-1"
                     onClick={() => onEliminar(producto.id)}
                   >
                     <svg
@@ -238,6 +239,7 @@ const TablaProductos = ({
           })}
         </tbody>
       </table>
+      </div>
       {ProductoSeleccionado && (
         <Detalles
           producto={ProductoSeleccionado}

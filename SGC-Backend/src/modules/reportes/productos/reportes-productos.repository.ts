@@ -29,7 +29,7 @@ export class ReportesProductosRepository {
         p.stock_total,
         p.stock_minimo,
         c.nombre AS categoria_nombre,
-        pr.nombre AS proveedor_nombre
+        pr.razon_social AS proveedor_nombre
        FROM productos p
        LEFT JOIN categorias c ON p.id_categoria = c.id
        LEFT JOIN proveedores pr ON p.id_proveedor = pr.id

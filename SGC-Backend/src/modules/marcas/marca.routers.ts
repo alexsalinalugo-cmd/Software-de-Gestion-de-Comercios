@@ -12,7 +12,7 @@ export const MarcaRouters = async (
   if (ruta === "/mostrar" && metodo === "GET") {
     return MarcaControllers.MostrarMarcasControllers(req, res);
   }
-  if (ruta === "crear" && metodo === "POST") {
+  if (ruta === "/crear" && metodo === "POST") {
     return MarcaControllers.CrearMarcasControllers(req, res);
   }
 };

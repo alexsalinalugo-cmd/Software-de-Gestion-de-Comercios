@@ -22,9 +22,9 @@ const EditarProveedoresComponents = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/70 z-50 backdrop-blur-sm animate-in fade-in duration-300 flex justify-center items-center p-4">
+    <div className="sgc-modal-backdrop">
       <form
-        className="p-8 border-2 border-gray-800/10 w-full lg:max-w-120 max-w-80 max-h-[90vh] rounded-2xl shadow-2xl overflow-y-auto flex flex-col bg-white gap-4 "
+        className="sgc-modal-card flex w-full max-w-xl flex-col gap-4 p-6"
         onSubmit={ManejarEnvio}
       >
         <div className="flex justify-between items-center">
@@ -33,7 +33,7 @@ const EditarProveedoresComponents = ({
           </h1>
           <button
             type="button" // Evita que dispare el submit
-            className="text-blue-500 hover:scale-110 transition-transform"
+            className="text-orange-600 hover:scale-110 transition-transform"
             onClick={onClose}
           >
             <svg
@@ -62,7 +62,7 @@ const EditarProveedoresComponents = ({
               type="text"
               name="razon_social"
               defaultValue={Proveedor.razon_social}
-              className="p-2 bg-gray-100 border border-gray-300 rounded focus:outline-blue-500 capitalize  "
+              className="bg-gray-50 capitalize"
               required
             />
           </div>
@@ -74,7 +74,7 @@ const EditarProveedoresComponents = ({
               type="text"
               name="cuit"
               defaultValue={Proveedor.cuit}
-              className="p-2 bg-gray-100 border border-gray-300 rounded focus:outline-blue-500 capitalize  "
+              className="bg-gray-50 capitalize"
               required
             />
           </div>
@@ -88,7 +88,7 @@ const EditarProveedoresComponents = ({
             type="text"
             name="nombre_contacto"
             defaultValue={Proveedor.nombre_contacto}
-            className="p-2 bg-gray-100 border border-gray-300 rounded focus:outline-blue-500 capitalize  "
+            className="bg-gray-50 capitalize"
             required
           />
         </div>
@@ -102,7 +102,7 @@ const EditarProveedoresComponents = ({
               type="text"
               name="telefono"
               defaultValue={Proveedor.telefono}
-              className="p-2 bg-gray-100 border border-gray-300 rounded focus:outline-blue-500 capitalize  "
+              className="bg-gray-50 capitalize"
               required
             />
           </div>
@@ -114,7 +114,7 @@ const EditarProveedoresComponents = ({
               type="email"
               name="email"
               defaultValue={Proveedor.email}
-              className="p-2 bg-gray-100 border border-gray-300 rounded focus:outline-blue-500 capitalize  "
+              className="bg-gray-50 capitalize"
               required
             />
           </div>
@@ -128,21 +128,21 @@ const EditarProveedoresComponents = ({
             type="text"
             name="dia_visita"
             defaultValue={Proveedor.dia_visita}
-            className="p-2 bg-gray-100 border border-gray-300 rounded focus:outline-blue-500 capitalize  "
+            className="bg-gray-50 capitalize"
             required
           />
         </div>
 
         <div className="flex flex-col gap-2 mt-2">
           <button
-            className="bg-blue-600 hover:bg-blue-700 py-2 px-2 rounded text-white font-bold text-[14px] transition-colors"
+            className="sgc-button-primary text-[14px]"
             type="submit"
           >
             Guardar Cambios
           </button>
           <button
             type="button"
-            className="bg-gray-200 hover:bg-gray-300 py-2 px-2 rounded text-gray-800 font-bold text-[14px] transition-colors"
+            className="sgc-button-secondary text-[14px]"
             onClick={onClose}
           >
             Cancelar

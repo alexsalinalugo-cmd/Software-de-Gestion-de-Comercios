@@ -1,36 +1,56 @@
 import Logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+const enlaces = [
+  { to: "/", label: "Dashboard" },
+  { to: "/GestionProductos", label: "Productos" },
+  { to: "/GestionVentas", label: "Ventas" },
+  { to: "/Categorias", label: "Categorias" },
+  { to: "/Proveedores", label: "Proveedores" },
+  { to: "/Reportes", label: "Reportes" },
+];
+
 export default function Silebar() {
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `rounded-md px-3 py-2 text-sm font-extrabold transition ${
+      isActive
+        ? "bg-orange-500 text-white shadow-sm shadow-orange-200"
+        : "text-slate-600 hover:bg-orange-50 hover:text-orange-700"
+    }`;
+
   return (
-    <div className="hidden md:flex h-screen justify-start   items-start bg-[#1a1c23] fixed top-0 left-0 w-50  ">
-      <div className="Flex flex-col p-10 items-center ">
-        <div>
-          <img src={Logo} alt="logo" className="md:w-20 h-auto w-35   " />
+    <>
+      <header className="fixed left-0 right-0 top-0 z-40 border-b border-orange-100 bg-white/95 px-4 py-3 shadow-sm backdrop-blur md:hidden">
+        <div className="flex items-center justify-between gap-4">
+          <img src={Logo} alt="logo" className="h-9 w-auto" />
+          <nav className="sgc-mobile-nav flex max-w-[calc(100vw-5rem)] gap-2 overflow-x-auto">
+            {enlaces.map((enlace) => (
+              <NavLink key={enlace.to} to={enlace.to} className={linkClass}>
+                {enlace.label}
+              </NavLink>
+            ))}
+          </nav>
         </div>
-        <nav className="mt-10 text-gray-400 font-bold  gap-5 flex flex-col justify-center items-start">
-          <div>
-            <Link to="/">Dashboard</Link>
-          </div>
-          <div>
-            <Link to="/GestionProductos">Productos</Link>
-          </div>
+      </header>
 
-          <div>
-            <Link to="/GestionVentas">Ventas</Link>
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-56 border-r border-orange-100 bg-white md:flex">
+        <div className="flex w-full flex-col p-6">
+          <div className="rounded-lg border border-orange-100 bg-orange-50/70 p-4">
+            <img src={Logo} alt="logo" className="h-16 w-auto" />
+            <p className="mt-4 text-xs font-black uppercase text-orange-700">
+              Sistema de gestion
+            </p>
+            <p className="text-sm font-bold text-slate-800">Comercios</p>
           </div>
-          <div>
-            <Link to="/Categorias">Categorias</Link>
-          </div>
-
-          <div>
-            <Link to="/Proveedores">Proveedores</Link>
-          </div>
-
-          <div>
-            <Link to="/Reportes">Reportes</Link>
-          </div>
-        </nav>
-      </div>
-    </div>
+          <nav className="mt-8 flex flex-col gap-2">
+            {enlaces.map((enlace) => (
+              <NavLink key={enlace.to} to={enlace.to} className={linkClass}>
+                {enlace.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      </aside>
+    </>
   );
 }

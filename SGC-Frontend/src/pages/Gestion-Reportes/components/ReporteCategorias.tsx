@@ -25,19 +25,24 @@ export default function ReporteCategorias() {
   }, [periodo]);
 
   return (
-    <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
-      <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white">
-        <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
-          <h1 className="font-black text-4xl">REPORTE DE CATEGORÍAS</h1>
-          <div className="flex gap-2">
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container">
+        <div className="sgc-page-header">
+          <div>
+            <p className="sgc-kicker">Rendimiento por rubro</p>
+            <h1 className="sgc-title">Reporte de categorías</h1>
+            <p className="sgc-subtitle">Rendimiento comercial y stock agrupado por categoría.</p>
+          </div>
+          <div className="flex gap-2 rounded-lg border border-orange-100 bg-orange-50/70 p-1">
             {["hoy", "7dias", "todo"].map((p) => (
               <button
                 key={p}
                 onClick={() => setPeriodo(p)}
-                className={`px-4 py-2 rounded-lg font-bold text-sm transition ${
+                className={`rounded-md px-4 py-2 font-bold text-sm transition ${
                   periodo === p
-                    ? "bg-purple-400 text-black"
-                    : "bg-[#1e2130] text-gray-400 hover:bg-[#252840]"
+                    ? "bg-orange-500 text-white"
+                    : "text-slate-500 hover:bg-white hover:text-orange-700"
                 }`}
               >
                 {p === "hoy" ? "Hoy" : p === "7dias" ? "7 días" : "Todo"}
@@ -47,29 +52,29 @@ export default function ReporteCategorias() {
         </div>
 
         {cargando ? (
-          <p className="text-gray-400">Cargando reporte...</p>
+          <div className="sgc-panel p-8 font-bold text-slate-500">Cargando reporte...</div>
         ) : reporte ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">CATEGORÍAS</p>
-                <p className="text-white font-black text-3xl">
+                <p className="text-slate-900 font-black text-3xl">
                   {reporte.metricas.total_categorias}
                 </p>
               </div>
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">PRODUCTOS</p>
-                <p className="text-purple-400 font-black text-3xl">
+                <p className="text-orange-700 font-black text-3xl">
                   {reporte.metricas.productos_asociados}
                 </p>
               </div>
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">STOCK TOTAL</p>
-                <p className="text-blue-400 font-black text-3xl">
+                <p className="text-orange-700 font-black text-3xl">
                   {Number(reporte.metricas.stock_total).toLocaleString("es-AR")}
                 </p>
               </div>
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">TOTAL VENDIDO</p>
                 <p className="text-green-400 font-black text-3xl">
                   {Number(reporte.metricas.total_vendido).toLocaleString(
@@ -80,8 +85,8 @@ export default function ReporteCategorias() {
               </div>
             </div>
 
-            <div className="bg-[#1e2130] rounded-xl p-6 mb-8">
-              <h2 className="text-white font-black text-xl mb-4">
+            <div className="sgc-panel p-6 mb-8">
+              <h2 className="text-slate-900 font-black text-xl mb-4">
                 VENTAS POR CATEGORÍA
               </h2>
               <div className="flex flex-col gap-3">
@@ -93,10 +98,10 @@ export default function ReporteCategorias() {
                   reporte.ventas_por_categoria.map((categoria) => (
                     <div
                       key={categoria.id}
-                      className="flex justify-between items-center border-b border-gray-700 pb-3 gap-4"
+                      className="flex justify-between items-center border-b border-slate-200 pb-3 gap-4"
                     >
                       <div>
-                        <p className="text-white font-bold">
+                        <p className="text-slate-900 font-bold">
                           {categoria.nombre}
                         </p>
                         <p className="text-gray-500 text-xs">
@@ -115,14 +120,14 @@ export default function ReporteCategorias() {
               </div>
             </div>
 
-            <div className="bg-[#1e2130] rounded-xl p-6">
-              <h2 className="text-white font-black text-xl mb-4">
+            <div className="sgc-panel p-6">
+              <h2 className="text-slate-900 font-black text-xl mb-4">
                 DETALLE DE CATEGORÍAS
               </h2>
               <div className="overflow-x-auto">
-                <table className="w-full text-white">
+                <table className="sgc-table">
                   <thead>
-                    <tr className="text-gray-400 text-sm text-left border-b border-gray-700">
+                    <tr>
                       <th className="pb-3">CATEGORÍA</th>
                       <th className="pb-3">PRODUCTOS</th>
                       <th className="pb-3">STOCK</th>
@@ -144,7 +149,7 @@ export default function ReporteCategorias() {
                       reporte.categorias.map((categoria) => (
                         <tr
                           key={categoria.id}
-                          className="border-b border-gray-700 hover:bg-[#252840]"
+                          className="border-b border-slate-100"
                         >
                           <td className="py-3 font-bold">
                             {categoria.nombre}
@@ -152,7 +157,7 @@ export default function ReporteCategorias() {
                           <td className="py-3 text-sm">
                             {categoria.cantidad_productos}
                           </td>
-                          <td className="py-3 text-blue-400 font-black">
+                          <td className="py-3 text-orange-700 font-black">
                             {Number(categoria.stock_total).toLocaleString(
                               "es-AR",
                             )}
@@ -175,8 +180,9 @@ export default function ReporteCategorias() {
             </div>
           </>
         ) : (
-          <p className="text-gray-500">No se pudo cargar el reporte</p>
+          <div className="sgc-panel p-8 font-bold text-slate-500">No se pudo cargar el reporte</div>
         )}
+        </div>
       </div>
     </section>
   );

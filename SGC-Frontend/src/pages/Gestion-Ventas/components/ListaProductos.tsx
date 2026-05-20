@@ -23,15 +23,15 @@ export default function ListaProductos({ productos, onAgregar }: Props) {
   });
 
   return (
-    <div className="flex-1 flex flex-col gap-4">
+    <div className="sgc-panel flex flex-1 flex-col gap-4 p-4">
       {/* Categorias */}
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setCategoriaActiva(null)}
           className={`px-3 py-1 rounded-lg text-xs font-bold transition ${
             categoriaActiva === null
-              ? "bg-yellow-400 text-black"
-              : "bg-[#1e2130] text-gray-400 hover:bg-[#252840]"
+              ? "bg-orange-500 text-white"
+              : "border border-slate-200 bg-white text-slate-600 hover:bg-orange-50 hover:text-orange-700"
           }`}
         >
           Todos
@@ -42,8 +42,8 @@ export default function ListaProductos({ productos, onAgregar }: Props) {
             onClick={() => setCategoriaActiva(categoria)}
             className={`px-3 py-1 rounded-lg text-xs font-bold transition ${
               categoriaActiva === categoria
-                ? "bg-yellow-400 text-black"
-                : "bg-[#1e2130] text-gray-400 hover:bg-[#252840]"
+                ? "bg-orange-500 text-white"
+                : "border border-slate-200 bg-white text-slate-600 hover:bg-orange-50 hover:text-orange-700"
             }`}
           >
             {categoria}
@@ -57,7 +57,7 @@ export default function ListaProductos({ productos, onAgregar }: Props) {
         placeholder="Buscar producto..."
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
-        className="w-full p-3 rounded-lg bg-[#1e2130] text-white border border-gray-600 focus:outline-none focus:border-yellow-400"
+        className="w-full"
       />
 
       {/* Lista */}
@@ -69,10 +69,10 @@ export default function ListaProductos({ productos, onAgregar }: Props) {
             <div
               key={producto.id}
               onClick={() => onAgregar(producto)}
-              className="flex justify-between items-center bg-[#1e2130] hover:bg-[#252840] cursor-pointer px-4 py-3 rounded-lg transition"
+              className="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 transition hover:border-orange-200 hover:bg-orange-50/60"
             >
               <div className="flex flex-col">
-                <p className="text-white font-bold text-sm">
+                <p className="text-sm font-bold text-slate-900">
                   {producto.nombre}
                 </p>
                 <p className="text-gray-500 text-xs">
@@ -80,7 +80,7 @@ export default function ListaProductos({ productos, onAgregar }: Props) {
                 </p>
               </div>
               <div className="flex flex-col items-end">
-                <p className="text-yellow-400 font-black text-sm">
+                <p className="text-sm font-black text-orange-700">
                   {Number(producto.precio_venta).toLocaleString("es-AR", {
                     style: "currency",
                     currency: "ARS",

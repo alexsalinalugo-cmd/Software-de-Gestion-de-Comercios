@@ -136,39 +136,42 @@ export default function GestionProductos() {
   };
 
   return (
-    <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
-      <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-col">
-          <span className="font-black text-4xl">GESTION DE PRODUCTOS</span>
-          <span className="text-gray-500 font-bold text-[13px]">
-            Catalago Industrial · {Productos.length} - Productos Registrados
-          </span>
-        </div>
-        <div className="w-full md:w-auto">
-          <AgregarProductosComponent
-            onAgregar={AgregarPro}
-            CategoriasProp={Categorias}
-            ProveedorProp={Proveedores}
-            MarcasProp={Marcas}
-            UbicacionesProp={Ubicaciones}
-          />
-        </div>
-      </div>
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container">
+          <div className="sgc-page-header">
+            <div>
+              <p className="sgc-kicker">Inventario comercial</p>
+              <h1 className="sgc-title">Gestión de productos</h1>
+              <p className="sgc-subtitle">
+                Catálogo industrial · {Productos.length} productos registrados
+              </p>
+            </div>
+            <AgregarProductosComponent
+              onAgregar={AgregarPro}
+              CategoriasProp={Categorias}
+              ProveedorProp={Proveedores}
+              MarcasProp={Marcas}
+              UbicacionesProp={Ubicaciones}
+            />
+          </div>
 
-      <div>
-        {Cargando ? (
-          <p className="text-shadow-red-600">Cargando</p>
-        ) : (
-          //Parametros que le pasamos a la tabla para mostrar los datos de los productos
-          <TablaPro
-            datos={Productos}
-            onEditar={FuncionEditar}
-            onEliminar={EliminarPro}
-            CategoriasProp={Categorias}
-            ProveedorProp={Proveedores}
-            MarcasProp={Marcas}
-          />
-        )}
+          {Cargando ? (
+            <div className="sgc-panel p-8 font-bold text-slate-500">
+              Cargando productos...
+            </div>
+          ) : (
+            //Parametros que le pasamos a la tabla para mostrar los datos de los productos
+            <TablaPro
+              datos={Productos}
+              onEditar={FuncionEditar}
+              onEliminar={EliminarPro}
+              CategoriasProp={Categorias}
+              ProveedorProp={Proveedores}
+              MarcasProp={Marcas}
+            />
+          )}
+        </div>
       </div>
       {ProductoEditar && (
         <EditarProductoComponent

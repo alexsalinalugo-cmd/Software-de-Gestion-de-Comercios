@@ -51,7 +51,7 @@ const EditarComponent = ({
   }, []);
   return (
     <div>
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 overflow-y-auto grid place-items-center py-10 p-4">
+      <div className="sgc-modal-backdrop">
         {/* fixed inset-0: Hace que el div ocupe toda la ventana del navegador y se quede quieto aunque hagas scroll.
             backdrop-blur-sm: (Opcional pero muy pro) Aplica un efecto de desenfoque al fondo (como en iOS o Windows), lo que da mucha elegancia.
             z-50: Asegura que el formulario esté "al frente" de cualquier otro elemento (Sidebar, Tabla, etc.).
@@ -65,7 +65,7 @@ const EditarComponent = ({
           */}
         <form
           onSubmit={ManejarEdicion}
-          className="bg-[#1a1c23] p-8 rounded-2xl shadow-2xl w-full  max-w-85 lg:max-w-2xl md:max-w-150   border border-gray-800 flex flex-col gap-6 "
+          className="sgc-modal-card flex w-full max-w-2xl flex-col gap-6 p-6 md:p-8"
         >
           <h1 className="text-2xl text-center font-black text-white">
             {" "}
@@ -222,7 +222,7 @@ const EditarComponent = ({
                 <button
                   type="button"
                   onClick={() => setEsnuevaUbicacion(!EsnuevaUbicacion)}
-                  className="text-[15px] text-blue-400 underline"
+                  className="text-[15px] text-orange-700 underline"
                 >
                   {EsnuevaUbicacion ? "Elegir Ubicacion" : "+ Nueva Ubicacion"}
                 </button>
@@ -349,7 +349,7 @@ const EditarComponent = ({
             <button
               type="button"
               onClick={() => setEscaner(!Escaner)}
-              className="bg-blue-500 text-white py-1 px-2 rounded text-[13px] mt-2  min-w-0"
+              className="sgc-button-secondary mt-2 min-w-0 text-[13px]"
             >
               {Escaner ? "Cerrar Escaner" : "Abrir Escaner"}
             </button>
@@ -357,13 +357,13 @@ const EditarComponent = ({
 
           <div className="flex-col flex gap-2">
             <button
-              className="bg-amber-500 py-1 px-2 rounded text-black font-bold text-[13px]"
+              className="sgc-button-primary text-[13px]"
               type="submit"
             >
               Agregar
             </button>
             <button
-              className="bg-amber-500 py-1 px-2 rounded text-black font-bold text-[13px]"
+              className="sgc-button-secondary text-[13px]"
               onClick={onClose}
               type="button"
             >

@@ -80,20 +80,25 @@ export default function ReporteVentas() {
   };
 
   return (
-    <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
-      <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white">
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
-          <h1 className="font-black text-4xl">REPORTE DE VENTAS</h1>
-          <div className="flex gap-2">
+        <div className="sgc-page-header">
+          <div>
+            <p className="sgc-kicker">Control de caja</p>
+            <h1 className="sgc-title">Reporte de ventas</h1>
+            <p className="sgc-subtitle">Total vendido, métodos de pago e historial por período.</p>
+          </div>
+          <div className="flex gap-2 rounded-lg border border-orange-100 bg-orange-50/70 p-1">
             {["hoy", "7dias", "todo"].map((p) => (
               <button
                 key={p}
                 onClick={() => setPeriodo(p)}
-                className={`px-4 py-2 rounded-lg font-bold text-sm transition ${
+                className={`rounded-md px-4 py-2 font-bold text-sm transition ${
                   periodo === p
-                    ? "bg-yellow-400 text-black"
-                    : "bg-[#1e2130] text-gray-400 hover:bg-[#252840]"
+                    ? "bg-orange-500 text-white"
+                    : "text-slate-500 hover:bg-white hover:text-orange-700"
                 }`}
               >
                 {p === "hoy" ? "Hoy" : p === "7dias" ? "7 días" : "Todo"}
@@ -103,27 +108,27 @@ export default function ReporteVentas() {
         </div>
 
         {cargando ? (
-          <p className="text-gray-400">Cargando reporte...</p>
+          <div className="sgc-panel p-8 font-bold text-slate-500">Cargando reporte...</div>
         ) : reporte ? (
           <>
             {/* Métricas */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">TOTAL VENDIDO</p>
-                <p className="text-yellow-400 font-black text-3xl">
+                <p className="text-orange-700 font-black text-3xl">
                   {Number(reporte.metricas.total_vendido).toLocaleString(
                     "es-AR",
                     { style: "currency", currency: "ARS" },
                   )}
                 </p>
               </div>
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">VENTAS REALIZADAS</p>
-                <p className="text-white font-black text-3xl">
+                <p className="text-slate-900 font-black text-3xl">
                   {reporte.metricas.cantidad_ventas}
                 </p>
               </div>
-              <div className="bg-[#1e2130] rounded-xl p-6">
+              <div className="sgc-panel p-6">
                 <p className="text-gray-400 text-sm mb-2">TICKET PROMEDIO</p>
                 <p className="text-green-400 font-black text-3xl">
                   {Number(reporte.metricas.ticket_promedio).toLocaleString(
@@ -135,8 +140,8 @@ export default function ReporteVentas() {
             </div>
 
             {/* Por método de pago */}
-            <div className="bg-[#1e2130] rounded-xl p-6 mb-8">
-              <h2 className="text-white font-black text-xl mb-4">
+            <div className="sgc-panel p-6 mb-8">
+              <h2 className="text-slate-900 font-black text-xl mb-4">
                 POR MÉTODO DE PAGO
               </h2>
               <div className="flex flex-col gap-3">
@@ -148,13 +153,13 @@ export default function ReporteVentas() {
                   reporte.por_metodo.map((item) => (
                     <div
                       key={item.metodo_pago}
-                      className="flex justify-between items-center border-b border-gray-700 pb-3"
+                    className="flex justify-between items-center border-b border-slate-200 pb-3"
                     >
-                      <span className="text-white font-bold">
+                      <span className="text-slate-900 font-bold">
                         {item.metodo_pago}
                       </span>
                       <div className="flex flex-col items-end">
-                        <span className="text-yellow-400 font-black">
+                        <span className="text-orange-700 font-black">
                           {Number(item.total).toLocaleString("es-AR", {
                             style: "currency",
                             currency: "ARS",
@@ -171,13 +176,14 @@ export default function ReporteVentas() {
             </div>
 
             {/* Historial */}
-            <div className="bg-[#1e2130] rounded-xl p-6">
-              <h2 className="text-white font-black text-xl mb-4">
+            <div className="sgc-panel p-6">
+              <h2 className="text-slate-900 font-black text-xl mb-4">
                 HISTORIAL DE VENTAS
               </h2>
-              <table className="w-full text-white">
+              <div className="overflow-x-auto">
+              <table className="sgc-table">
                 <thead>
-                  <tr className="text-gray-400 text-sm text-left border-b border-gray-700">
+                  <tr>
                     <th className="pb-3">N°</th>
                     <th className="pb-3">FECHA</th>
                     <th className="pb-3">CAJA</th>
@@ -201,7 +207,7 @@ export default function ReporteVentas() {
                     reporte.historial.map((venta) => (
                       <tr
                         key={venta.id}
-                        className="border-b border-gray-700 hover:bg-[#252840]"
+                        className="border-b border-slate-100"
                       >
                         <td className="py-3">#{venta.id}</td>
                         <td className="py-3 text-sm text-gray-400">
@@ -212,7 +218,7 @@ export default function ReporteVentas() {
                           {venta.cantidad_productos} productos
                         </td>
                         <td className="py-3 text-sm">{venta.metodo_pago}</td>
-                        <td className="py-3 text-yellow-400 font-black">
+                        <td className="py-3 text-orange-700 font-black">
                           {Number(venta.total).toLocaleString("es-AR", {
                             style: "currency",
                             currency: "ARS",
@@ -221,7 +227,7 @@ export default function ReporteVentas() {
                         <td className="py-3">
                           <button
                             onClick={() => verDetalle(venta)}
-                            className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded text-xs hover:bg-blue-500/40 transition"
+                            className="sgc-button-secondary min-h-0 px-3 py-1 text-xs"
                           >
                             Ver detalle
                           </button>
@@ -231,19 +237,21 @@ export default function ReporteVentas() {
                   )}
                 </tbody>
               </table>
+              </div>
             </div>
           </>
         ) : (
-          <p className="text-gray-500">No se pudo cargar el reporte</p>
+          <div className="sgc-panel p-8 font-bold text-slate-500">No se pudo cargar el reporte</div>
         )}
+        </div>
       </div>
 
       {/* Modal detalle */}
       {ventaSeleccionada && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#1e2130] rounded-2xl p-8 w-full max-w-lg shadow-2xl">
+        <div className="sgc-modal-backdrop">
+          <div className="sgc-modal-card w-full max-w-lg p-6 md:p-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-white font-black text-xl">
+              <h2 className="text-slate-900 font-black text-xl">
                 Venta #{ventaSeleccionada.id}
               </h2>
               <button
@@ -252,7 +260,7 @@ export default function ReporteVentas() {
                   setDetalle([]);
                   setEditando(null);
                 }}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-orange-700"
               >
                 ✕
               </button>
@@ -262,10 +270,10 @@ export default function ReporteVentas() {
               {detalle.map((item) => (
                 <div
                   key={item.id}
-                  className="flex justify-between items-center border-b border-gray-700 pb-3"
+                  className="flex justify-between items-center border-b border-slate-200 pb-3"
                 >
                   <div className="flex-1">
-                    <p className="text-white text-sm font-bold">
+                    <p className="text-slate-900 text-sm font-bold">
                       {item.nombre}
                     </p>
                     <p className="text-gray-400 text-xs">
@@ -284,7 +292,7 @@ export default function ReporteVentas() {
                         value={cantidadNueva}
                         onChange={(e) => setCantidadNueva(e.target.value)}
                         placeholder="Nueva cant."
-                        className="w-24 p-1 rounded bg-[#2a2d3a] text-white border border-gray-600 text-xs"
+                        className="w-24 text-xs"
                         autoFocus
                       />
                       <button
@@ -305,7 +313,7 @@ export default function ReporteVentas() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-3">
-                      <p className="text-yellow-400 font-black">
+                      <p className="text-orange-700 font-black">
                         {(
                           Number(item.cantidad) * Number(item.precio_unitario)
                         ).toLocaleString("es-AR", {
@@ -318,7 +326,7 @@ export default function ReporteVentas() {
                           setEditando(item.id);
                           setCantidadNueva("");
                         }}
-                        className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded text-xs hover:bg-yellow-500/40"
+                        className="sgc-button-secondary min-h-0 px-2 py-1 text-xs"
                       >
                         Editar
                       </button>
@@ -328,9 +336,9 @@ export default function ReporteVentas() {
               ))}
             </div>
 
-            <div className="flex justify-between items-center border-t border-gray-700 pt-4">
+            <div className="flex justify-between items-center border-t border-slate-200 pt-4">
               <span className="text-gray-400 font-bold">TOTAL</span>
-              <span className="text-white font-black text-xl">
+              <span className="text-slate-900 font-black text-xl">
                 {totalActual.toLocaleString("es-AR", {
                   style: "currency",
                   currency: "ARS",

@@ -23,8 +23,8 @@ export class ReportesProveedoresRepository {
     const [rows] = await pool.execute(
       `SELECT
         pr.id,
-        pr.nombre,
-        pr.medio_contacto,
+        pr.razon_social AS nombre,
+        COALESCE(pr.email, CAST(pr.telefono AS CHAR)) AS medio_contacto,
         pr.nombre_contacto,
         pr.dia_visita,
         COUNT(p.id) AS cantidad_productos,
@@ -33,8 +33,8 @@ export class ReportesProveedoresRepository {
         COALESCE(SUM(p.stock_total * p.precio_costo), 0) AS valor_inventario
        FROM proveedores pr
        LEFT JOIN productos p ON pr.id = p.id_proveedor AND p.activo = 1
-       GROUP BY pr.id, pr.nombre, pr.medio_contacto, pr.nombre_contacto, pr.dia_visita
-       ORDER BY cantidad_productos DESC, pr.nombre ASC`,
+       GROUP BY pr.id, pr.razon_social, pr.email, pr.telefono, pr.nombre_contacto, pr.dia_visita
+       ORDER BY cantidad_productos DESC, pr.razon_social ASC`,
     );
 
     return rows as ProveedorResumen[];
@@ -54,7 +54,7 @@ export class ReportesProveedoresRepository {
     const [rows] = await pool.execute(
       `SELECT
         pr.id,
-        pr.nombre,
+        pr.razon_social AS nombre,
         COALESCE(SUM(dv.cantidad), 0) AS cantidad_vendida,
         COALESCE(SUM(dv.cantidad * dv.precio_unitario), 0) AS total_vendido
        FROM proveedores pr
@@ -63,7 +63,7 @@ export class ReportesProveedoresRepository {
        INNER JOIN ventas v ON dv.id_venta = v.id
        WHERE 1 = 1
        ${filtroVentas}
-       GROUP BY pr.id, pr.nombre
+       GROUP BY pr.id, pr.razon_social
        ORDER BY total_vendido DESC, cantidad_vendida DESC`,
     );
 
@@ -75,7 +75,7 @@ export class ReportesProveedoresRepository {
       `SELECT
         p.id,
         p.nombre,
-        pr.nombre AS proveedor_nombre,
+        pr.razon_social AS proveedor_nombre,
         p.stock_total,
         p.stock_minimo
        FROM productos p

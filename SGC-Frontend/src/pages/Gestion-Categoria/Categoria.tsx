@@ -4,7 +4,6 @@ import EditarCategoriasComponent from "./components/EditarCategoriasComponent";
 import CategoriasCards from "./components/CategoriasCardsComponent";
 import type {
   categoriasInterface,
-  CrearCategoria,
   CrearCategoriasResponse,
 } from "../interfaces/categorias";
 import { CategoriasServices } from "../../services/Gestion-CategoriasServices";
@@ -54,12 +53,19 @@ export default function Categoria() {
     }
   };
   return (
-    <div className="h-full w-full flex flex-col ">
-      <div className="md:pl-60 p-6 mt-10 md:mt-20 ">
-        <div className="flex justify-between ">
-          <h1 className="font-black text-4xl">CATEGORIAS</h1>
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container">
+          <div className="sgc-page-header">
+            <div>
+              <p className="sgc-kicker">Organización del catálogo</p>
+              <h1 className="sgc-title">Categorías</h1>
+              <p className="sgc-subtitle">
+                Agrupación de productos, stock asociado y valor de inventario.
+              </p>
+            </div>
           <AgregarCategoriasComponent onAgregar={AgregarCategorias} />
-        </div>
+          </div>
         <CategoriasCards
           CategoriasProp={categorias}
           CategoriaAEditar={FuncionCategoriaAEditar}
@@ -72,6 +78,7 @@ export default function Categoria() {
           />
         )}
       </div>
-    </div>
+      </div>
+    </section>
   );
 }

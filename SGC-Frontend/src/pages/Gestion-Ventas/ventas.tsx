@@ -143,19 +143,21 @@ export default function GestionVentas() {
   }
 
   return (
-    <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
+    <section className="sgc-page">
       {notificacion && (
-        <div className="fixed top-6 right-6 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 font-bold">
+        <div className="fixed right-6 top-6 z-50 rounded-lg bg-green-500 px-6 py-3 font-bold text-white shadow-lg">
           {notificacion}
         </div>
       )}
 
-      <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white">
-        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+      <div className="sgc-shell">
+        <div className="sgc-container">
+        <div className="sgc-page-header">
           <div>
-            <h1 className="font-black text-4xl">GESTION DE VENTAS</h1>
+            <p className="sgc-kicker">Punto de venta</p>
+            <h1 className="sgc-title">Gestión de ventas</h1>
             {caja && (
-              <p className="text-gray-400 text-sm mt-1">
+              <p className="sgc-subtitle">
                 Caja #{caja.id} — Apertura:{" "}
                 {Number(caja.monto_apertura).toLocaleString("es-AR", {
                   style: "currency",
@@ -166,15 +168,17 @@ export default function GestionVentas() {
           </div>
           <button
             onClick={handleCerrarCaja}
-            className="bg-red-500 text-white font-bold px-6 py-2 rounded-lg hover:bg-red-400 transition"
+            className="sgc-button-danger"
           >
             Cerrar Caja
           </button>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-col gap-6 xl:flex-row">
           {cargando ? (
-            <p className="text-white">Cargando productos...</p>
+            <div className="sgc-panel flex-1 p-8 font-bold text-slate-500">
+              Cargando productos...
+            </div>
           ) : (
             <ListaProductos
               productos={productos}
@@ -189,6 +193,7 @@ export default function GestionVentas() {
             onQuitar={quitarDelCarrito}
             onConfirmar={confirmarVenta}
           />
+        </div>
         </div>
       </div>
     </section>

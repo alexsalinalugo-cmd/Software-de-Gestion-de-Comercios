@@ -5,57 +5,79 @@ export default function Reportes() {
 
   const reportes = [
     {
-      titulo: "Reporte de Ventas",
-      descripcion:
-        "Total vendido, métodos de pago, historial de ventas por turno",
-      icono: "💰",
+      titulo: "Reporte de ventas",
+      descripcion: "Total vendido, metodos de pago e historial por caja.",
+      inicial: "V",
       ruta: "/Reportes/Ventas",
-      color: "border-yellow-400",
+      acento: "bg-orange-500",
     },
     {
-      titulo: "Reporte de Productos",
-      descripcion: "Stock actual, productos críticos, más vendidos",
-      icono: "📦",
+      titulo: "Reporte de productos",
+      descripcion: "Inventario, stock critico, valor actual y mas vendidos.",
+      inicial: "P",
       ruta: "/Reportes/Productos",
-      color: "border-blue-400",
+      acento: "bg-orange-600",
     },
     {
-      titulo: "Reporte de Categorías",
-      descripcion: "Ventas por categoría, stock por categoría",
-      icono: "🏷️",
+      titulo: "Reporte de categorias",
+      descripcion: "Rendimiento comercial y stock agrupado por categoria.",
+      inicial: "C",
       ruta: "/Reportes/Categorias",
-      color: "border-purple-400",
+      acento: "bg-orange-700",
     },
     {
-      titulo: "Reporte de Proveedores",
-      descripcion: "Productos por proveedor, historial de compras",
-      icono: "🚚",
+      titulo: "Reporte de proveedores",
+      descripcion: "Productos asociados, inventario y ventas por proveedor.",
+      inicial: "R",
       ruta: "/Reportes/Proveedores",
-      color: "border-green-400",
+      acento: "bg-orange-500",
     },
   ];
 
   return (
-    <section className="bg-[#2a2d3a] w-full min-h-screen flex flex-col">
-      <div className="md:pl-60 p-6 mt-10 md:mt-20 text-white">
-        <h1 className="font-black text-4xl mb-8">REPORTES</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {reportes.map((reporte) => (
-            <div
-              key={reporte.titulo}
-              onClick={() => navigate(reporte.ruta)}
-              className={`bg-[#1e2130] border-l-4 ${reporte.color} rounded-xl p-6 cursor-pointer hover:bg-[#252840] transition flex gap-4 items-start`}
-            >
-              <span className="text-4xl">{reporte.icono}</span>
-              <div>
-                <h2 className="text-white font-black text-xl mb-1">
-                  {reporte.titulo}
-                </h2>
-                <p className="text-gray-400 text-sm">{reporte.descripcion}</p>
-              </div>
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container">
+          <div className="sgc-page-header">
+            <div>
+            <p className="sgc-kicker">
+              Informes de gestion
+            </p>
+            <h1 className="sgc-title">
+              Reportes comerciales
+            </h1>
+            <p className="sgc-subtitle">
+              Métricas para revisar ventas, inventario, categorías y proveedores.
+            </p>
             </div>
-          ))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            {reportes.map((reporte) => (
+              <button
+                key={reporte.titulo}
+                onClick={() => navigate(reporte.ruta)}
+                className="sgc-card group flex min-h-36 w-full items-start gap-4 p-5 text-left"
+              >
+                <span
+                  className={`${reporte.acento} grid h-12 w-12 shrink-0 place-items-center rounded-lg text-lg font-black text-white`}
+                >
+                  {reporte.inicial}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-lg font-black text-slate-950">
+                    {reporte.titulo}
+                  </span>
+                  <span className="mt-2 block text-sm font-medium leading-6 text-slate-500">
+                    {reporte.descripcion}
+                  </span>
+                  <span className="mt-4 inline-flex text-sm font-black text-orange-700 group-hover:text-orange-900">
+                    Abrir reporte
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>

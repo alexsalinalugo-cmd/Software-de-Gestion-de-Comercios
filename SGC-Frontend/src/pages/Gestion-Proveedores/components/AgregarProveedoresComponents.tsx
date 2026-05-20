@@ -19,9 +19,9 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
   return (
     <div>
       {Formulario ? (
-        <div className=" fixed inset-0 bg-slate-900/70 z-50 backdrop-blur-sm animate-in fade-in duration-300 flex justify-center items-center">
+        <div className="sgc-modal-backdrop">
           <form
-            className="p-8 border-2 border-gray-800/10  w-full lg:max-w-120 max-w-80 max-h-[80vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col bg-white gap-4 "
+            className="sgc-modal-card flex w-full max-w-xl flex-col gap-4 p-6"
             onSubmit={NuevoProveedor}
           >
             <div className="flex justify-between">
@@ -29,7 +29,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
                 Proveedor Nuevo
               </h1>
               <button
-                className="text-blue-500 p-2"
+                className="p-2 text-orange-600"
                 onClick={() => setFormulario(!Formulario)}
               >
                 <svg
@@ -58,7 +58,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
                   <input
                     type="text"
                     placeholder="ejem(Distribuidora Juan)"
-                    className="p-2 bg-gray-800/30 rounded  "
+                    className="bg-gray-50"
                     name="razon_social"
                     required
                   />
@@ -70,7 +70,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
                   <input
                     type="text"
                     placeholder="ejem(1233433)"
-                    className="p-2 bg-gray-800/30 rounded "
+                    className="bg-gray-50"
                     name="cuit"
                     required
                   />
@@ -84,7 +84,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
               <input
                 type="text"
                 placeholder="ejem(Pablo)"
-                className="p-2 bg-gray-800/30 rounded"
+                className="bg-gray-50"
                 name="nombre_contacto"
                 required
               />
@@ -98,7 +98,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
                 <input
                   type="text"
                   placeholder="eje(1132546798)"
-                  className="p-2 bg-gray-800/30 rounded "
+                  className="bg-gray-50"
                   name="telefono"
                   required
                 />
@@ -111,7 +111,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
                 <input
                   type="email"
                   placeholder="eje(juan1243@gmail.com)"
-                  className="p-2 bg-gray-800/30 rounded "
+                  className="bg-gray-50"
                   name="email"
                   required
                 />
@@ -126,7 +126,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
                 <input
                   type="text"
                   placeholder="eje(Jueves)"
-                  className="p-2 bg-gray-800/30 rounded "
+                  className="bg-gray-50"
                   name="dia_visita"
                   required
                 />
@@ -134,14 +134,14 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
             </div>
             <div className="flex-col flex gap-2">
               <button
-                className="bg-blue-500 py-2 px-2 rounded text-black font-bold text-[13px]"
+                className="sgc-button-primary text-[13px]"
                 type="submit"
               >
                 Agregar
               </button>
               <button
                 type="button"
-                className="bg-gray-200 hover:bg-gray-300 py-2 px-2 rounded text-gray-800 font-bold text-[14px] transition-colors"
+                className="sgc-button-secondary text-[14px]"
                 onClick={() => setFormulario(!Formulario)}
               >
                 Cancelar
@@ -153,7 +153,7 @@ const AgregarProveedoresComponents = ({ onAgregar }: AgregarProveedores) => {
         <BotonAgregar
           texto="Agregar Proveedores"
           onclick={() => setFormulario(!Formulario)}
-          bg="bg-blue-500  "
+          bg="bg-orange-500"
         />
       )}
     </div>

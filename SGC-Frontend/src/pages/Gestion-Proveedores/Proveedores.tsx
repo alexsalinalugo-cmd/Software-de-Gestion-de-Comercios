@@ -52,14 +52,19 @@ export default function Proveedores() {
     setFomularioEditar(ProveedorElegido);
   };
   return (
-    <div className=" w-full min-h-screen flex flex-col">
-      <div className="pl-60 mt-10 md:mt-20 p-6 ">
-        <div className="flex lg:justify-between   items-center ">
-          <div className="font-black text-4xl">GESTION DE PROVEEDORES</div>
-          <div>
+    <section className="sgc-page">
+      <div className="sgc-shell">
+        <div className="sgc-container">
+          <div className="sgc-page-header">
+            <div>
+              <p className="sgc-kicker">Abastecimiento</p>
+              <h1 className="sgc-title">Gestión de proveedores</h1>
+              <p className="sgc-subtitle">
+                Contactos, visitas y productos vinculados a cada proveedor.
+              </p>
+            </div>
             <AgregarProveedoresComponents onAgregar={AgregarProveedores} />
           </div>
-        </div>
 
         <ProveedoresCards
           ProveedoresProp={Proveedores}
@@ -73,6 +78,7 @@ export default function Proveedores() {
           />
         )}
       </div>
-    </div>
+      </div>
+    </section>
   );
 }

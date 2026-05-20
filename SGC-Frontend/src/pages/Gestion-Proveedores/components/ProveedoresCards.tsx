@@ -10,17 +10,17 @@ const ProveedoresCards = ({
   >(null);
 
   return (
-    <div className=" grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mt-10 space-x-1 ">
+    <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
       {ProveedoresProp.map((p) => (
         <div
           key={p.id}
-          className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow"
+          className="sgc-card overflow-hidden"
         >
-          <div className="p-5 bg-gray-50 border-b border-gray-100">
+          <div className="border-b border-gray-100 bg-white p-5">
             <div className="flex justify-between  items-start">
               <div className="flex gap-4">
                 {/* Avatar/Logo temporal */}
-                <div className="w-12 h-12 bg-slate-700 rounded-lg flex items-center justify-center text-white font-bold">
+                <div className="sgc-avatar">
                   {p.razon_social.substring(0, 2).toUpperCase()}
                 </div>
                 <div>
@@ -60,7 +60,7 @@ const ProveedoresCards = ({
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-blue-500" // Color azul para el teléfono
+                    className="text-orange-600"
                   >
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                   </svg>
@@ -102,7 +102,7 @@ const ProveedoresCards = ({
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-purple-500" // Color purpura para que resalte diferente al tel/email
+                  className="text-orange-600"
                 >
                   <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
                   <line x1="16" y1="2" x2="16" y2="6" />
@@ -188,13 +188,13 @@ const ProveedoresCards = ({
                 </table>
               </div>
               <button
-                className="w-full mt-3 py-2 border-t border-dashed border-slate-200 text-center text-[11px] text-blue-600 font-bold hover:bg-blue-50 transition-colors rounded-b-lg"
+                className="w-full mt-3 border-t border-dashed border-slate-200 py-2 text-center text-[11px] font-black text-orange-700 transition-colors hover:bg-orange-50"
                 onClick={() => setProveedorSeleccionado(p.id)}
               >
                 VER CATÁLOGO COMPLETO
               </button>
               <button
-                className="w-full mt-3 py-2 border-t border-dashed border-slate-200 text-center text-[11px] text-blue-600 font-bold hover:bg-blue-50 transition-colors rounded-b-lg"
+                className="w-full mt-3 border-t border-dashed border-slate-200 py-2 text-center text-[11px] font-black text-orange-700 transition-colors hover:bg-orange-50"
                 onClick={() => ProveedorElegido(p)}
               >
                 Editar

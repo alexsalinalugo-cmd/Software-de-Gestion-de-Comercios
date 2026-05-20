@@ -12,7 +12,7 @@ import Proveedores from "./pages/Gestion-Proveedores/Proveedores";
 import Categoria from "./pages/Gestion-Categoria/Categoria";
 function App() {
   return (
-    <div>
+    <div className="sgc-app">
       <Silebar />
       <Routes>
         <Route path="/" element={<Dashboard />}></Route>

@@ -28,7 +28,7 @@ const QRScanner = ({ onScanSuccess }: Props) => {
       scannerRef.current = scanner;
 
       // El segundo parámetro es para errores de escaneo (opcional)
-      scanner.render(onScanSuccess, (error) => {
+      scanner.render(onScanSuccess, () => {
         // Errores de lectura silenciosos o console.log(error);
       });
     }

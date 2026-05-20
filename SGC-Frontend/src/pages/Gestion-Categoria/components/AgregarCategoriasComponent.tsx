@@ -20,9 +20,9 @@ const AgregarCategoriasComponent = ({ onAgregar }: CrearCategoria) => {
   return (
     <div>
       {Formulario ? (
-        <div className="fixed inset-0 bg-slate-900/70 z-50 backdrop-blur-sm animate-in fade-in duration-300 flex justify-center items-center p-4">
+        <div className="sgc-modal-backdrop">
           <form
-            className="p-8 border-2 border-gray-800/10 w-full lg:max-w-120 max-w-80 max-h-[90vh] rounded-2xl shadow-2xl overflow-y-auto flex flex-col bg-white gap-4 "
+            className="sgc-modal-card flex w-full max-w-md flex-col gap-4 p-6"
             onSubmit={ManejarEnvio}
           >
             <div className="flex justify-between items-center">
@@ -31,7 +31,7 @@ const AgregarCategoriasComponent = ({ onAgregar }: CrearCategoria) => {
               </h1>
               <button
                 type="button" // Evita que dispare el submit
-                className="text-blue-500 hover:scale-110 transition-transform"
+                className="text-orange-600 hover:scale-110 transition-transform"
                 onClick={() => setFormulario(!Formulario)}
               >
                 <svg
@@ -58,7 +58,7 @@ const AgregarCategoriasComponent = ({ onAgregar }: CrearCategoria) => {
                 type="text"
                 name="nombre" // <--- CLAVE: Tiene que coincidir con data.get("nombre")
                 // Llenamos el campo con el valor actual
-                className="p-2 border rounded-lg focus:outline-blue-500 bg-gray-50"
+                className="bg-gray-50"
                 placeholder="Ej: Carpinteria, Construccion..."
                 required
               />
@@ -66,14 +66,14 @@ const AgregarCategoriasComponent = ({ onAgregar }: CrearCategoria) => {
             <div className="flex flex-col gap-2 mt-4">
               <button
                 type="submit"
-                className="bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="sgc-button-primary"
               >
                 Guardar Cambios
               </button>
               <button
                 type="button"
                 onClick={() => setFormulario(!Formulario)}
-                className="bg-gray-200 text-gray-700 font-bold py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                className="sgc-button-secondary"
               >
                 Cancelar
               </button>
@@ -85,7 +85,7 @@ const AgregarCategoriasComponent = ({ onAgregar }: CrearCategoria) => {
           <BotonAgregar // le pasamos el texto y la funcion para mostrar el formulario al hacer clic en el boton
             texto="Agregar Categorias"
             onclick={() => setFormulario(!Formulario)}
-            bg="bg-blue-500"
+            bg="bg-orange-500"
           />
         </div>
       )}
